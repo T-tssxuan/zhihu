@@ -1,0 +1,5 @@
+*.swp
+data/*
+tmp/
+backup/
+__pycache__/*
