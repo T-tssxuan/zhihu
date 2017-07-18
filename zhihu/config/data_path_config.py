@@ -11,16 +11,16 @@ class RawDataPathConfig:
 
 class DataPathConfig:
     def get_topic_desc_path():
-        return Tools.get_data_directory() + 'topic_desc.csv'
+        return Tools.get_data_directory() + 'topic_desc.tsv'
     def get_children_of_topic_path():
-        return Tools.get_data_directory() + 'children_of_topic.csv'
+        return Tools.get_data_directory() + 'children_of_topic.tsv'
     def get_parents_of_topic_path():
-        return Tools.get_data_directory() + 'parents_of_topic.csv'
+        return Tools.get_data_directory() + 'parents_of_topic.tsv'
 
     def get_question_train_set_path():
-        return Tools.get_data_directory() + 'question_train_set.txt'
+        return Tools.get_data_directory() + 'question_train_set.tsv'
     def get_question_topic_train_set_path():
-        return Tools.get_data_directory() + 'question_topic_train_set.txt'
+        return Tools.get_data_directory() + 'question_topic_train_set.tsv'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
