@@ -3,7 +3,7 @@
 Generate a dictionary for all topic direct parent topic and the directly child topics
 """
 import os
-from ..config.data_path_config import DataPathConfig
+from ..config.data_path_config import DataPathConfig, RawDataPathConfig
 from ..utils.tools import Tools
 
 log = Tools.get_logger('preprocess')
@@ -15,7 +15,8 @@ def get_topic_relation():
     tfile = open(DataPathConfig.get_topic_desc_path(), 'w')
     cfile = open(DataPathConfig.get_children_of_topic_path(), 'w')
     pfile = open(DataPathConfig.get_parents_of_topic_path(), 'w')
-    with open(DataPathConfig.get_raw_topic_info_path()) as f:
+
+    with open(RawDataPathConfig.get_topic_info_path()) as f:
         for line in f:
             elements = line.rstrip('\n').split('\t')
             elements = [ele.rstrip(' ') for ele in elements]

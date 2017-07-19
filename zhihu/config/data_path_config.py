@@ -17,10 +17,22 @@ class DataPathConfig:
     def get_parents_of_topic_path():
         return Tools.get_data_directory() + 'parents_of_topic.tsv'
 
-    def get_question_train_set_path():
-        return Tools.get_data_directory() + 'question_train_set.tsv'
+    def get_question_train_word_title_set_path():
+        return Tools.get_data_directory() + 'question_train_word_title_set.csv'
+    def get_question_train_word_desc_set_path():
+        return Tools.get_data_directory() + 'question_train_word_desc_set.csv'
+    def get_question_train_character_title_set_path():
+        return Tools.get_data_directory() + 'question_train_character_title_set.csv'
+    def get_question_train_character_desc_set_path():
+        return Tools.get_data_directory() + 'question_train_character_desc_set.csv'
+
     def get_question_topic_train_set_path():
-        return Tools.get_data_directory() + 'question_topic_train_set.tsv'
+        return Tools.get_data_directory() + 'question_topic_train_set.csv'
+
+    def get_word_embedding_path():
+        return Tools.get_data_directory() + 'word_embedding.txt'
+    def get_char_embedding_path():
+        return Tools.get_data_directory() + 'char_embedding.txt'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
