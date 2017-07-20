@@ -66,9 +66,8 @@ class DataProvider:
 
 class TopicProvider(DataProvider):
     def __init__(self, topic_file_path):
-        super(TopicProvider, self).__init__(topic_file_path, '')
-        self.topic_dict = dict()
-        with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+        super(TopicProvider, self).__init__(topic_file_path, '', False)
+        self.topic_dict = dict() with open(DataPathConfig.get_topic_set_path(), 'r') as f:
             for idx, line in enumerate(f):
                 self.topic_dict[line.rstrip()] = idx
         self.num = len(self.topic_dict.keys())
@@ -78,15 +77,15 @@ class TopicProvider(DataProvider):
         for idx in range(len(sentences)):
             for topic in sentences[idx]:
                 vecs[idx][self.topic_dict[topic]] = 1.;
-        return np.vstack(vecs)
+        return vecs
 
     def next(self, batch_size):
-        data, _ = super(TopicProvider, self).next(batch_size)
-        return self._one_hot(data)
+        sentences, _ = super(TopicProvider, self).next(batch_size)
+        return self._one_hot(sentences)
     
     def test(self):
-        data, _ = super(TopicProvider, self).test()
-        return self._one_hot(data)
+        sentences, _ = super(TopicProvider, self).test()
+        return self._one_hot(sentences)
 
 if __name__ == '__main__':
     lp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
