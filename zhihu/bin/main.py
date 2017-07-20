@@ -13,7 +13,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'char_provider' or sys.argv[1] == 'all':
         dp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
                           DataPathConfig.get_char_embedding_path())
-        data, length  = dp.next(2)
+        data, length  = dp.next(2, 1000)
         print(len(data[0]), len(data[1]))
         print(length)
         print(data)
@@ -27,6 +27,6 @@ if __name__ == '__main__':
     if sys.argv[1] == 'topic_provider' or sys.argv[1] == 'all':
         tp = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
         data = tp.next(2)
-        print(data.shape)
+        print(len(data[0]), len(data[1]))
         print(data[0].sum(), data[1].sum())
         print(data)

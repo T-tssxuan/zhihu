@@ -10,14 +10,16 @@ class DataProvider:
         self.offset = 0
         self.data_file_path = data_file_path
         self.end_pos = int(total * 0.7)
-        self.padding_wv = [0. for i in range(wv_demension)]
         self.is_need_length = is_need_length
 
         self.embeding = None
         if embedding_path != '':
             self.embeding = gensim.models.KeyedVectors.load_word2vec_format(embedding_path).wv
+            self.padding_wv = [0. for i in range(wv_demension)]
+        else:
+            self.padding_wv = 'END'
 
-    def _get_data(self, f, size):
+    def _get_data(self, f, size, fixed_length=0):
         data = []
         length = []
         for i in range(size):
@@ -35,6 +37,14 @@ class DataProvider:
                         row.append(self.embeding[it])
                     else:
                         row.append(self.padding_wv)
+
+            # if need to padding to the same length
+            if self.is_need_length and fixed_length > 0:
+                if fixed_length > len(row):
+                    row += [self.padding_wv for i in range(fixed_length - len(row))]
+                else:
+                    row = row[:fixed_length]
+
             if self.embeding:
                 data.append(row)
             else:
@@ -42,7 +52,7 @@ class DataProvider:
 
         return data, length
 
-    def next(self, batch_size, max_time):
+    def next(self, batch_size, fixed_length=0):
         if self.offset == 0:
             self.data_file = open(self.data_file_path, 'r')
 
@@ -51,23 +61,24 @@ class DataProvider:
 
         self.offset = (self.offset + batch_size) % self.end_pos
 
-        data, length = self._get_data(self.data_file, batch_size)
+        data, length = self._get_data(self.data_file, batch_size, fixed_length)
 
         if self.offset == 0:
             self.data_file.close()
 
         return data, length
     
-    def test(self):
+    def test(self, fixed_length):
         f = open(self.data_file_path, 'r')
         f.readlines(self.end_pos)
-        data, length = self._get_data(f, total - self.end_pos)
+        data, length = self._get_data(f, total - self.end_pos, fixed_length)
         return data, length
 
 class TopicProvider(DataProvider):
     def __init__(self, topic_file_path):
         super(TopicProvider, self).__init__(topic_file_path, '', False)
-        self.topic_dict = dict() with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+        self.topic_dict = dict() 
+        with open(DataPathConfig.get_topic_set_path(), 'r') as f:
             for idx, line in enumerate(f):
                 self.topic_dict[line.rstrip()] = idx
         self.num = len(self.topic_dict.keys())

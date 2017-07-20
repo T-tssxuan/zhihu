@@ -17,11 +17,7 @@ from ...utils.tools import Tools
 log = Tools.get_logger('dynamic_rnn')
 
 learning_rate = 0.01
-<<<<<<< HEAD
 batch_size = 1
-=======
-batch_size = 128
->>>>>>> 49be119e730a567e58e8e88a7cfa0d9809ebabcf
 
 def get_dynamic_rnn_graph(X, X_length, scope):
     with tf.variable_scope(scope):
@@ -30,47 +26,31 @@ def get_dynamic_rnn_graph(X, X_length, scope):
                                                  dtype=tf.float64,
                                                  sequence_length=X_length,
                                                  inputs=X)
-<<<<<<< HEAD
         print(tf.shape(outputs), tf.shape(last_states))
     return last_states
 
 log.info('begin init network')
 # # feed desc word representation into the network
-# X_word_desc = tf.placeholder(tf.float64, [batch_size, None, 256])
+# X_word_desc_max_time = 1000
+# X_word_desc = tf.placeholder(tf.float64, [batch_size, X_word_desc_max_time, 256])
 # X_word_desc_length = tf.placeholder(tf.int32, [batch_size])
 # word_desc_lstm = get_dynamic_rnn_graph(X_word_desc, X_word_desc_length, 'word_desc')
 #
 # # feed title word representation into the network
-# X_word_title = tf.placeholder(tf.float64, [batch_size, None, 256])
+# X_word_title_max_time = 100
+# X_word_title = tf.placeholder(tf.float64, [batch_size, X_word_title_max_time, 256])
 # X_word_title_length = tf.placeholder(tf.int32, [batch_size])
 # word_title_lstm = get_dynamic_rnn_graph(X_word_title, X_word_title_length, 'word_title')
 #
 # # feed desc char representation into the network
-# X_char_desc = tf.placeholder(tf.float64, [batch_size, None, 256])
+# X_char_desc_max_time = 500
+# X_char_desc = tf.placeholder(tf.float64, [batch_size, X_char_desc_max_time, 256])
 # X_char_desc_length = tf.placeholder(tf.int32, [batch_size])
 # char_desc_lstm = get_dynamic_rnn_graph(X_char_desc, X_char_desc_length, 'char_desc')
-=======
-    return last_states
-
-log.info('begin init network')
-# feed desc word representation into the network
-X_word_desc = tf.placeholder(tf.float64, [batch_size, None, 256])
-X_word_desc_length = tf.placeholder(tf.int32, [batch_size])
-word_desc_lstm = get_dynamic_rnn_graph(X_word_desc, X_word_desc_length, 'word_desc')
-
-# feed title word representation into the network
-X_word_title = tf.placeholder(tf.float64, [batch_size, None, 256])
-X_word_title_length = tf.placeholder(tf.int32, [batch_size])
-word_title_lstm = get_dynamic_rnn_graph(X_word_title, X_word_title_length, 'word_title')
-
-# feed desc char representation into the network
-X_char_desc = tf.placeholder(tf.float64, [batch_size, None, 256])
-X_char_desc_length = tf.placeholder(tf.int32, [batch_size])
-char_desc_lstm = get_dynamic_rnn_graph(X_char_desc, X_char_desc_length, 'char_desc')
->>>>>>> 49be119e730a567e58e8e88a7cfa0d9809ebabcf
 
 # feed title char representation into the network
-X_char_title = tf.placeholder(tf.float64, [batch_size, None, 256])
+X_char_title_max_time = 50
+X_char_title = tf.placeholder(tf.float64, [batch_size, X_char_title_max_time, 256])
 X_char_title_length = tf.placeholder(tf.int32, [batch_size])
 char_title_lstm = get_dynamic_rnn_graph(X_char_title, X_char_title_length, 'char_title')
 
@@ -115,7 +95,7 @@ with tf.Session() as sess:
         data_char_desc, data_char_desc_length = dp_char_desc.next(batch_size)
         data_char_title, data_cahr_title_length = dp_char_title.next(batch_size)
         data_topic = dp_topic.next(batch_size)
-        print(data_topic.shape)
+        print('topic: ', data_topic.shape)
 
         feed_dict={
                    # X_word_desc: data_word_desc,
