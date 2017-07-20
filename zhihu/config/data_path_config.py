@@ -16,6 +16,8 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'children_of_topic.tsv'
     def get_parents_of_topic_path():
         return Tools.get_data_directory() + 'parents_of_topic.tsv'
+    def get_topic_set_path():
+        return Tools.get_data_directory() + 'topic_set.txt'
 
     def get_question_train_word_title_set_path():
         return Tools.get_data_directory() + 'question_train_word_title_set.csv'

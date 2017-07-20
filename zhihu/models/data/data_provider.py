@@ -6,11 +6,12 @@ total = 2999967
 wv_demension = 256
 
 class DataProvider:
-    def __init__(self, data_file_path, embedding_path):
+    def __init__(self, data_file_path, embedding_path, is_need_length=True):
         self.offset = 0
         self.data_file_path = data_file_path
         self.end_pos = int(total * 0.7)
         self.padding_wv = [0. for i in range(wv_demension)]
+        self.is_need_length = is_need_length
 
         self.embeding = None
         if embedding_path != '':
@@ -18,12 +19,15 @@ class DataProvider:
 
     def _get_data(self, f, size):
         data = []
+        length = []
         for i in range(size):
             ll = f.readline()
-            print(ll)
             if ll == '':
                 break
             items = ll.rstrip().split(',')
+            if self.is_need_length:
+                length.append(len(items))
+
             row = []
             if self.embeding:
                 for it in items:
@@ -36,7 +40,7 @@ class DataProvider:
             else:
                 data.append(items)
 
-        return data
+        return data, length
 
     def next(self, batch_size):
         if self.offset == 0:
@@ -45,22 +49,46 @@ class DataProvider:
         if self.offset + batch_size > self.end_pos:
             self.offset = self.end_pos - batch_size
 
-        self.offset = (self.offset + batch_size) % batch_size
+        self.offset = (self.offset + batch_size) % self.end_pos
 
-        data = self._get_data(self.data_file, batch_size)
+        data, length = self._get_data(self.data_file, batch_size)
 
         if self.offset == 0:
             self.data_file.close()
 
-        return data
+        return data, length
     
-    def train(self):
+    def test(self):
         f = open(self.data_file_path, 'r')
         f.readlines(self.end_pos)
-        data = self._get_data(f, total - self.end_pos)
-        return data
+        data, length = self._get_data(f, total - self.end_pos)
+        return data, length
+
+class TopicProvider(DataProvider):
+    def __init__(self, topic_file_path):
+        super(TopicProvider, self).__init__(topic_file_path, '', False)
+        self.topic_dict = dict()
+        with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+            for idx, line in enumerate(f):
+                self.topic_dict[line.rstrip()] = idx
+        self.num = len(self.topic_dict.keys())
+
+    def _one_hot(self, sentences):
+        vecs = [np.zeros(self.num) for _ in range(len(sentences))]
+        for idx in range(len(sentences)):
+            for topic in sentences[idx]:
+                vecs[idx][self.topic_dict[topic]] = 1.;
+        return vecs
+
+    def next(self, batch_size):
+        sentences, _ = super(TopicProvider, self).next(batch_size)
+        return self._one_hot(sentences)
+    
+    def test(self):
+        sentences, _ = super(TopicProvider, self).test()
+        return self._one_hot(sentences)
 
 if __name__ == '__main__':
     lp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
                       DataPathConfig.get_char_embedding_path())
-    print(lp.next(2))
+    print(lp.next(2)[0])
