@@ -20,7 +20,7 @@ class Tools:
         logger = logging.getLogger(name)
         logger.setLevel(level)
 
-        fmt = '%(asctime)s %(levelname)-8s ' + name + ': %(message)s'
+        fmt = '%(asctime)s %(levelname)-8s [' + name + '] %(message)s'
         datefmt = '%Y-%m-%d %H:%M:%S'
         formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
 
