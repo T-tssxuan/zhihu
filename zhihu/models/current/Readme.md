@@ -1,10 +1,25 @@
-# 问题
-1. 如何建立话题之间的关系
-2. 如何进行分类信息提取
-3. 子话题和父话题之间的关系
+# 模型
 
+# 参数
 
-## 模型一
-1. 层级attention，使用子话题attention扫描文档，再用父话题扫描子话题top，一直下去，取得分类
+### V1
 
- 
+```
+X_word_desc_max_time = 1000 
+X_word_title_max_time = 100
+X_char_desc_max_time = 500
+X_char_title_max_time = 50
+
+这个版本设置似乎不合理，得结果见 log/lstm_fc_v1.log
+其结果一种在15左右徘徊
+```
+
+### V2 
+
+```
+X_word_desc_max_time = 60
+X_word_title_max_time = 20
+X_char_desc_max_time = 200
+X_char_title_max_time = 25
+
+```
