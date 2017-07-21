@@ -91,7 +91,7 @@ dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
 log.info('begin train')
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for i in range(5001):
+    for i in range(100000):
         data_word_desc, data_word_desc_length = dp_word_desc.next(batch_size, X_word_desc_max_time)
         data_word_title, data_word_title_length = dp_word_title.next(batch_size, X_word_title_max_time)
         data_char_desc, data_char_desc_length = dp_char_desc.next(batch_size, X_char_desc_max_time)
