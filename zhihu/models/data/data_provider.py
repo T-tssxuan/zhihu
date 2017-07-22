@@ -83,18 +83,20 @@ class TopicProvider(DataProvider):
                 self.topic_dict[line.rstrip()] = idx
         self.num = len(self.topic_dict.keys())
 
-    def _one_hot(self, sentences):
+    def _one_hot(self, sentences, fixed_length=0):
         vecs = [np.zeros(self.num) for _ in range(len(sentences))]
         for idx in range(len(sentences)):
             for topic in sentences[idx]:
                 vecs[idx][self.topic_dict[topic]] = 1.;
+            if fixed_length > 0 and fixed_length > self.num:
+                vecs[idx] += [0 for _ in range(fixed_length - self.num)]
         return vecs
 
-    def next(self, batch_size):
+    def next(self, batch_size, fixed_length):
         sentences, _ = super(TopicProvider, self).next(batch_size)
         return self._one_hot(sentences)
     
-    def test(self):
+    def test(self, fixed_length):
         sentences, _ = super(TopicProvider, self).test()
         return self._one_hot(sentences)
 
