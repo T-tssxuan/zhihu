@@ -120,8 +120,7 @@ with tf.Session() as sess:
         sess.run(optimizer, feed_dict=feed_dict)
         if i % 10 == 0:
             loss = sess.run(cost, feed_dict=feed_dict)
-            tp = np.array(data_topic)
-            avg = tp.sum() / tp.shape[0]
+            avg = data_topic.sum() / data_topic.shape[0]
             log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_char_title.offset, avg))
 
 log.info('finished train')
