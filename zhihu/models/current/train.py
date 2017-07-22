@@ -31,25 +31,25 @@ def get_dynamic_rnn_graph(X, X_length, scope):
 
 log.info('begin init network')
 # feed desc word representation into the network
-X_word_desc_max_time = 1000
+X_word_desc_max_time = 60
 X_word_desc = tf.placeholder(tf.float64, [batch_size, X_word_desc_max_time, 256], name='X_word_desc')
 X_word_desc_length = tf.placeholder(tf.int32, [batch_size], name='X_word_desc_length')
 word_desc_lstm = get_dynamic_rnn_graph(X_word_desc, X_word_desc_length, 'word_desc')
 
 # feed title word representation into the network
-X_word_title_max_time = 100
+X_word_title_max_time = 20
 X_word_title = tf.placeholder(tf.float64, [batch_size, X_word_title_max_time, 256], name='X_word_title')
 X_word_title_length = tf.placeholder(tf.int32, [batch_size], name='X_word_title_length')
 word_title_lstm = get_dynamic_rnn_graph(X_word_title, X_word_title_length, 'word_title')
 
 # feed desc char representation into the network
-X_char_desc_max_time = 500
+X_char_desc_max_time = 200
 X_char_desc = tf.placeholder(tf.float64, [batch_size, X_char_desc_max_time, 256], name='X_char_desc')
 X_char_desc_length = tf.placeholder(tf.int32, [batch_size], name='X_char_desc_length')
 char_desc_lstm = get_dynamic_rnn_graph(X_char_desc, X_char_desc_length, 'char_desc')
 
 # feed title char representation into the network
-X_char_title_max_time = 50
+X_char_title_max_time = 25
 X_char_title = tf.placeholder(tf.float64, [batch_size, X_char_title_max_time, 256], name='X_char_title')
 X_char_title_length = tf.placeholder(tf.int32, [batch_size], name='X_char_title_length')
 char_title_lstm = get_dynamic_rnn_graph(X_char_title, X_char_title_length, 'char_title')
@@ -91,7 +91,7 @@ dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
 log.info('begin train')
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for i in range(5001):
+    for i in range(100000):
         data_word_desc, data_word_desc_length = dp_word_desc.next(batch_size, X_word_desc_max_time)
         data_word_title, data_word_title_length = dp_word_title.next(batch_size, X_word_title_max_time)
         data_char_desc, data_char_desc_length = dp_char_desc.next(batch_size, X_char_desc_max_time)
