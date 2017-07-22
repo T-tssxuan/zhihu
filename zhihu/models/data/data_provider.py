@@ -85,7 +85,7 @@ class TopicProvider(DataProvider):
 
     def _one_hot(self, sentences, fixed_length=0):
         length = max(self.num, fixed_length)
-        vecs = [np.zeros(length) for _ in range(len(sentences))]
+        vecs = np.zeros((len(sentences), length))
         for idx in range(len(sentences)):
             for topic in sentences[idx]:
                 vecs[idx][self.topic_dict[topic]] = 1.;
