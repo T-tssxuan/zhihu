@@ -94,11 +94,11 @@ class TopicProvider(DataProvider):
 
     def next(self, batch_size, fixed_length):
         sentences, _ = super(TopicProvider, self).next(batch_size)
-        return self._one_hot(sentences)
+        return self._one_hot(sentences, fixed_length)
     
     def test(self, fixed_length):
         sentences, _ = super(TopicProvider, self).test()
-        return self._one_hot(sentences)
+        return self._one_hot(sentences, fixed_length)
 
 if __name__ == '__main__':
     lp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
