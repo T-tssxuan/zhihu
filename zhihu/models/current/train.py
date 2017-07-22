@@ -17,17 +17,19 @@ from ...utils.tools import Tools
 
 log = Tools.get_logger('dynamic_rnn')
 
-learning_rate = 0.01
+learning_rate = 0.001
 batch_size = 128
 topic_num = 2048
+num_hidden = 128
 
 def get_dynamic_rnn_graph(X, X_length, scope):
     with tf.variable_scope(scope):
-        cell = tf.contrib.rnn.LSTMCell(num_units=64, state_is_tuple=True)
+        cell = tf.contrib.rnn.LSTMCell(num_units=num_hidden, state_is_tuple=True)
         outputs, last_states = tf.nn.dynamic_rnn(cell=cell,
                                                  dtype=tf.float64,
                                                  sequence_length=X_length,
                                                  inputs=X)
+        last_states
     return last_states.h
 
 log.info('begin init network')
@@ -63,14 +65,19 @@ log.info('char_title_lstm({})'.format(char_title_lstm.shape))
 topics = tf.placeholder(tf.float64, [batch_size, topic_num])
 
 lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_lstm], axis=1)
-# lstm = char_title_lstm
+lstm_mean = tf.reduce_mean(lstm)
 
 log.info('lstm({})'.format(lstm.shape))
-fc1 = tf.contrib.layers.fully_connected(inputs=lstm, num_outputs=512)
+fc1 = tf.contrib.layers.fully_connected(inputs=lstm, num_outputs=1024)
+log.info('fc1: {}'.format(fc1.shape))
 drop_fc1 = tf.nn.dropout(fc1, 0.5)
-fc2 = tf.contrib.layers.fully_connected(inputs=drop_fc1, num_outputs=1024)
-drop_fc2 = tf.nn.dropout(fc2, 0.5)
-logits = tf.contrib.layers.fully_connected(inputs=drop_fc2, num_outputs=topic_num)
+log.info('drop_fc1: {}'.format(drop_fc1.shape))
+drop_fc1_mean = tf.reduce_mean(drop_fc1)
+# fc2 = tf.contrib.layers.fully_connected(inputs=drop_fc1, num_outputs=1024)
+# drop_fc2 = tf.nn.dropout(fc2, 0.5)
+# log.info('drop_fc2: {}'.format(drop_fc2.shape))
+logits = tf.contrib.layers.fully_connected(inputs=drop_fc1, num_outputs=topic_num)
+logits_mean = tf.reduce_mean(logits)
 
 values, indices = tf.nn.top_k(logits, 5)
 
@@ -99,7 +106,7 @@ dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
 log.info('begin train')
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    for i in range(100000):
+    for i in range(10000000):
         data_word_desc, data_word_desc_length = dp_word_desc.next(batch_size, X_word_desc_max_time)
         data_word_title, data_word_title_length = dp_word_title.next(batch_size, X_word_title_max_time)
         data_char_desc, data_char_desc_length = dp_char_desc.next(batch_size, X_char_desc_max_time)
@@ -119,7 +126,10 @@ with tf.Session() as sess:
                   }
         sess.run(optimizer, feed_dict=feed_dict)
         if i % 10 == 0:
-            loss = sess.run(cost, feed_dict=feed_dict)
+            loss, _lstm_mean, _logits_mean, _drop_fc1_mean = sess.run([cost, lstm_mean, logits_mean, drop_fc1_mean], feed_dict=feed_dict)
+            log.info('lstm_mean: {}'.format(_lstm_mean))
+            log.info('drop_fc1_mean: {}'.format(_drop_fc1_mean))
+            log.info('logits: {}'.format(_logits_mean))
             avg = data_topic.sum() / data_topic.shape[0]
             log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_char_title.offset, avg))
 
