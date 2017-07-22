@@ -26,7 +26,9 @@ if __name__ == '__main__':
         print(data)
     if sys.argv[1] == 'topic_provider' or sys.argv[1] == 'all':
         tp = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
-        data = tp.next(2)
-        print(len(data[0]), len(data[1]))
-        print(data[0].sum(), data[1].sum())
-        print(data)
+        for i in range(10):
+            data = tp.next(2)
+            print(len(data[0]), len(data[1]))
+            print(data[0].sum(), data[1].sum())
+            print(data.sum() / data.shape[0])
+            print(data)
