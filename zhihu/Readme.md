@@ -18,5 +18,15 @@ question_train_word_desc_set:
 question_train_word_title_set: 
     max(187), min(1), mean(12), std(6)
     [1.0, 6.0, 8.0, 9.0, 10.0, 11.0, 13.0, 15.0, 18.0, 23.0]
-    
+
+each topic element numbers: 
+    max(66259), min(1636), sum(7022750), mean(3517), std(4139)
+    [1636, 1846, 1917, 2006, 2130, 2301, 2574, 2953, 3733, 5512]
+
+topic_cout:
+    max(19), min(1), mean(2.3), std(1)
+    [1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0]
+    all_leave: 778168
+    all_not_leave: 851451
+    the_two: 1370348
 ```

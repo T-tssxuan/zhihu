@@ -1,6 +1,6 @@
 from ..preprocess.get_topic_relation import get_topic_relation
 from ..preprocess.question_format import format_question_data
-from ..models.data.data_provider import TopicProvider, DataProvider
+from ..models.data.data_provider import TopicProvider, DataProvider, BinaryTopicProvider
 from ..config.data_path_config import RawDataPathConfig, DataPathConfig
 import os
 import sys
@@ -32,3 +32,11 @@ if __name__ == '__main__':
             print(data[0].sum(), data[1].sum())
             print(data.sum() / data.shape[0])
             print(data)
+    if sys.argv[1] == 'binary_provider' or sys.argv[1] == 'all':
+        tp = BinaryTopicProvider(DataPathConfig.get_question_topic_train_set_path())
+        for i in range(100):
+            for j in range(1999):
+                data = tp.next(10, j)
+                print(data[0].sum(), data[1].sum())
+                print(data.sum() / data.shape[0])
+                # print(data)

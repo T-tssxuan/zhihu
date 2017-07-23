@@ -1,54 +1,25 @@
-from ...config.data_path_config import DataPathConfig
 import gensim
 import numpy as np
+from ...utils.tools import Tools
+from gensim import models,corpora
+import os 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
+log.info('tfidf_data_provider')
 
 total = 2999967
 wv_demension = 256
 
 class DataProvider:
-    def __init__(self, data_file_path, embedding_path, is_need_length=True):
+    def __init__(self):
         self.offset = 0
-        self.data_file_path = data_file_path
         self.end_pos = int(total * 0.7)
-        self.is_need_length = is_need_length
+        self.tfidf = gensim.interfaces.TransformedCorpus.load(dir_path + './tf_idf')
 
-        self.embeding = None
-        if embedding_path != '':
-            self.embeding = gensim.models.KeyedVectors.load_word2vec_format(embedding_path).wv
-            self.padding_wv = [0. for i in range(wv_demension)]
-        else:
-            self.padding_wv = 'END'
-
-    def _get_data(self, f, size, fixed_length=0):
+    def _get_data(self, pos):
         data = []
-        length = []
         for i in range(size):
-            ll = f.readline()
-            if ll == '':
-                break
-            items = ll.rstrip().split(',')
-            if self.is_need_length:
-                length.append(len(items))
-
-            row = []
-            if self.embeding:
-                for it in items:
-                    if it in self.embeding:
-                        row.append(self.embeding[it])
-                    else:
-                        row.append(self.padding_wv)
-
-            # if need to padding to the same length
-            if self.is_need_length and fixed_length > 0:
-                if fixed_length > len(row):
-                    row += [self.padding_wv for i in range(fixed_length - len(row))]
-                else:
-                    row = row[:fixed_length]
-
-            if self.embeding:
-                data.append(row)
-            else:
-                data.append(items)
+            j
 
         return data, length
 

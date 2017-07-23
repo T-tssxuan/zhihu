@@ -35,6 +35,8 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'word_embedding.txt'
     def get_char_embedding_path():
         return Tools.get_data_directory() + 'char_embedding.txt'
+    def get_topic_to_topic_matrix_path():
+        return Tools.get_data_directory() + 'topic_to_topic.mtx'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
