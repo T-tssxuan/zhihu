@@ -14,6 +14,7 @@ import numpy as np
 from ..data.data_provider import DataProvider, TopicProvider
 from ...config.data_path_config import DataPathConfig
 from ...utils.tools import Tools
+from ..validate.score import Score
 
 log = Tools.get_logger('dynamic_rnn')
 
@@ -64,7 +65,8 @@ log.info('char_title_lstm({})'.format(char_title_lstm.shape))
 # the topic placeholder
 topics = tf.placeholder(tf.float64, [batch_size, topic_num])
 
-lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_lstm], axis=1)
+# lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_lstm], axis=1)
+lstm = char_desc_lstm
 lstm_mean = tf.reduce_mean(lstm)
 
 log.info('lstm({})'.format(lstm.shape))
@@ -79,7 +81,7 @@ drop_fc1_mean = tf.reduce_mean(drop_fc1)
 logits = tf.contrib.layers.fully_connected(inputs=drop_fc1, num_outputs=topic_num)
 logits_mean = tf.reduce_mean(logits)
 
-values, indices = tf.nn.top_k(logits, 5)
+top_k_values, top_k_indices = tf.nn.top_k(logits, 5)
 
 log.info('logits: {}'.format(logits.shape))
 log.info('topics: {}'.format(topics.shape))
@@ -103,6 +105,7 @@ dp_char_title = DataProvider(DataPathConfig.get_question_train_character_title_s
 log.info('begin topic init data provider')
 dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
 
+score = Score()
 log.info('begin train')
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -126,11 +129,13 @@ with tf.Session() as sess:
                   }
         sess.run(optimizer, feed_dict=feed_dict)
         if i % 10 == 0:
-            loss, _lstm_mean, _logits_mean, _drop_fc1_mean = sess.run([cost, lstm_mean, logits_mean, drop_fc1_mean], feed_dict=feed_dict)
-            log.info('lstm_mean: {}'.format(_lstm_mean))
-            log.info('drop_fc1_mean: {}'.format(_drop_fc1_mean))
-            log.info('logits: {}'.format(_logits_mean))
+            loss, _lstm_mean, _logits_mean, _drop_fc1_mean, _logits = sess.run([cost, lstm_mean, logits_mean, drop_fc1_mean, logits], feed_dict=feed_dict)
+            # log.info('lstm_mean: {}'.format(_lstm_mean))
+            # log.info('drop_fc1_mean: {}'.format(_drop_fc1_mean))
+            log.info('logits_mean: {}'.format(_logits_mean))
             avg = data_topic.sum() / data_topic.shape[0]
             log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_char_title.offset, avg))
+            _score = score.score(_logits, data_topic)
+            log.info('eval score: {}'.format(_score))
 
 log.info('finished train')

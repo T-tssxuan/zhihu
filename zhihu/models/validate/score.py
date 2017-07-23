@@ -2,10 +2,10 @@ import numpy as np
 import math
 
 class Score:
-    def __init__(self, pred, src):
-        self.merged = [(list(set(a)), list(set(b))) for a, b in zip(pred, src)]
+    def __init__(self):
+        pass
 
-    def eval(self, predict_label_and_marked_label_list):
+    def _eval(self, predict_label_and_marked_label_list):
         """
         :param predict_label_and_marked_label_list: 一个元组列表。例如
         [ ([1, 2, 3, 4, 5], [4, 5, 6, 7]),
@@ -36,13 +36,19 @@ class Score:
             precision += ((right_num / float(sample_num))) / math.log(2.0 + pos)  # 下标0-4 映射到 pos1-5 + 1，所以最终+2
         recall = float(right_label_num) / all_marked_label_num
 
-        return (precision * recall) / (precision + recall)
+        return (precision * recall) / max((precision + recall), 0.000001)
 
-    def score(self):
-        return self.eval(self.merged)
+    def score(self, pre, src):
+        pre = np.array(pre)
+        pre = pre.argsort()[:, -5:][:, ::-1].tolist()
+        src = np.array(src)
+        src = [list(np.where(ele > 0)[0]) for ele in src]
+        merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
+        return self._eval(merged)
 
 if __name__ == '__main__':
-    pred = np.random.randint(0, 1000, size=(1000, 5))
-    src = np.random.randint(0, 1000, size=(1000, 5))
-    v = Score(pred, src)
-    print(v.score())
+    pred = np.random.randint(0, 1000, size=(100, 5))
+    src = np.random.randint(0, 2, size=(100, 10))
+    v = Score()
+    score = v.score(pred, src)
+    print(score)
