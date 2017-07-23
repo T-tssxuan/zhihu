@@ -65,8 +65,7 @@ log.info('char_title_lstm({})'.format(char_title_lstm.shape))
 # the topic placeholder
 topics = tf.placeholder(tf.float64, [batch_size, topic_num])
 
-# lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_lstm], axis=1)
-lstm = char_desc_lstm
+lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_lstm], axis=1)
 lstm_mean = tf.reduce_mean(lstm)
 
 log.info('lstm({})'.format(lstm.shape))
