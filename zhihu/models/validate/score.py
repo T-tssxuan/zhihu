@@ -2,8 +2,8 @@ import numpy as np
 import math
 
 class Score:
-    def __init__(self):
-        pass
+    def __init__(self, topk=3):
+        self.topk = topk
 
     def _eval(self, predict_label_and_marked_label_list):
         """
@@ -40,7 +40,7 @@ class Score:
 
     def score(self, pre, src):
         pre = np.array(pre)
-        pre = pre.argsort()[:, -5:][:, ::-1].tolist()
+        pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
         src = np.array(src)
         src = [list(np.where(ele > 0)[0]) for ele in src]
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
