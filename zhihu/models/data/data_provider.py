@@ -99,6 +99,23 @@ class TopicProvider(DataProvider):
         sentences, _ = super(TopicProvider, self).test()
         return self._one_hot(sentences, fixed_length)
 
+class BinaryTopicProvider(TopicProvider):
+    def __init__(self, topic_file_path):
+        super(BinaryTopicProvider, self).__init__(topic_file_path)
+
+    def _to_binary(self, vecs, class_idx):
+        vecs = vecs[:, class_idx].reshape(-1, 1)
+        vecs = np.hstack([np.zeros((vecs.shape[0], 1)), vecs])
+        return vecs
+
+    def next(self, batch_size, class_idx):
+        vecs = super(BinaryTopicProvider, self).next(batch_size)
+        return self._to_binary(vecs, class_idx)
+    
+    def test(self, class_idx):
+        vecs = super(BinaryTopicProvider, self).test()
+        return self._to_binary(vecs, class_idx)
+
 if __name__ == '__main__':
     lp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
                       DataPathConfig.get_char_embedding_path())
