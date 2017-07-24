@@ -11,7 +11,7 @@
 
 import tensorflow as tf
 import numpy as np
-from ..data.data_provider import DataProvider, TopicProvider
+from ..data.data_provider import DataProvider, TopicProvider, PropagatedTopicProvider
 from ...config.data_path_config import DataPathConfig
 from ...utils.tools import Tools
 from ..validate.score import Score
@@ -20,7 +20,7 @@ log = Tools.get_logger('dynamic_rnn')
 
 learning_rate = 0.001
 batch_size = 128
-topic_num = 2048
+topic_num = 1999
 num_hidden = 128
 
 def get_dynamic_rnn_graph(X, X_length, scope):
@@ -102,7 +102,8 @@ log.info('begin char title init data provider')
 dp_char_title = DataProvider(DataPathConfig.get_question_train_character_title_set_path(),
                              DataPathConfig.get_char_embedding_path())
 log.info('begin topic init data provider')
-dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
+# dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
+dp_topic = PropagatedTopicProvider()
 
 score = Score()
 log.info('begin train')

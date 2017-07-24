@@ -99,6 +99,29 @@ class TopicProvider(DataProvider):
         sentences, _ = super(TopicProvider, self).test()
         return self._one_hot(sentences, fixed_length)
 
+class PropagatedTopicProvider(DataProvider):
+    def __init__(self):
+        topic_file_path = DataPathConfig.get_topic_with_parent_propagate()
+        self.num = 1999
+        super(PropagatedTopicProvider, self).__init__(topic_file_path, '', False)
+
+    def _one_hot(self, sentences, fixed_length=0):
+        length = max(self.num, fixed_length)
+        vecs = np.zeros((len(sentences), length))
+        for row in range(len(sentences)):
+            for col in range(length):
+                if sentences[row][col] == '1':
+                    vecs[row][col] = 1.
+        return vecs
+
+    def next(self, batch_size, fixed_length=0):
+        sentences, _ = super(PropagatedTopicProvider, self).next(batch_size)
+        return self._one_hot(sentences, fixed_length)
+    
+    def test(self, fixed_length=0):
+        sentences, _ = super(PropagatedTopicProvider, self).test()
+        return self._one_hot(sentences, fixed_length)
+
 class BinaryTopicProvider(TopicProvider):
     def __init__(self, topic_file_path):
         super(BinaryTopicProvider, self).__init__(topic_file_path)

@@ -1,6 +1,6 @@
 from ..preprocess.get_topic_relation import get_topic_relation
 from ..preprocess.question_format import format_question_data
-from ..models.data.data_provider import TopicProvider, DataProvider, BinaryTopicProvider
+from ..models.data.data_provider import TopicProvider, DataProvider, BinaryTopicProvider, PropagatedTopicProvider
 from ..config.data_path_config import RawDataPathConfig, DataPathConfig
 import os
 import sys
@@ -40,3 +40,11 @@ if __name__ == '__main__':
                 print(data[0].sum(), data[1].sum())
                 print(data.sum() / data.shape[0])
                 # print(data)
+    if sys.argv[1] == 'ptp' or sys.argv[1] == 'all':
+        ptp = PropagatedTopicProvider()
+        for i in range(10):
+            data = ptp.next(2)
+            print(len(data[0]), len(data[1]))
+            print(data[0].sum(), data[1].sum())
+            print(data.sum() / data.shape[0])
+            print(data)
