@@ -27,7 +27,7 @@ def get_topic_relation():
             tfile.write('\t'.join(tmp) + '\n')
 
             tmp = [elements[0]] + elements[1].split(',')
-            pfile.write('\t'.join(tmp) + '\n')
+            pfile.write(','.join(tmp) + '\n')
 
             if elements[1] != '':
                 for ele in elements[1].split(','):
@@ -37,7 +37,7 @@ def get_topic_relation():
             topics.add(elements[0])
 
         for key in children:
-            cfile.write('\t'.join([key] + list(children[key])) + '\n')
+            cfile.write(','.join([key] + list(children[key])) + '\n')
 
     tfile.close()
     pfile.close()

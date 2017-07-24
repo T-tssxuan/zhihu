@@ -13,9 +13,9 @@ class DataPathConfig:
     def get_topic_desc_path():
         return Tools.get_data_directory() + 'topic_desc.tsv'
     def get_children_of_topic_path():
-        return Tools.get_data_directory() + 'children_of_topic.tsv'
+        return Tools.get_data_directory() + 'children_of_topic.csv'
     def get_parents_of_topic_path():
-        return Tools.get_data_directory() + 'parents_of_topic.tsv'
+        return Tools.get_data_directory() + 'parents_of_topic.csv'
     def get_topic_set_path():
         return Tools.get_data_directory() + 'topic_set.txt'
 
@@ -37,6 +37,9 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'char_embedding.txt'
     def get_topic_to_topic_matrix_path():
         return Tools.get_data_directory() + 'topic_to_topic.mtx'
+
+    def get_topic_with_parent_propagate():
+        return Tools.get_data_directory() + 'topic_with_parent_propagate.csv'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
