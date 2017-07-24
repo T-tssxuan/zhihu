@@ -11,9 +11,11 @@ def get_parent_info():
     parent = dict()
     with open(DataPathConfig.get_parents_of_topic_path(), 'r') as f:
         for line in f:
-            elements = line.rstrip().split(',')
-            parent[elements[0]] = elements[1:]
-    print(parent.keys())
+            line = line.rstrip()
+            elements = line.split(',')
+            parent[elements[0]] = []
+            if line[-1] != ',':
+                parent[elements[0]] = elements[1:]
     return parent
 
 def get_topic_index():
@@ -55,9 +57,8 @@ def topic_encode():
                 update_parent(parent, topic_idx, t, vec)
             vec = [str(i) for i in vec]
             tfile.write(','.join(vec) + '\n')
-            if idx % 10000 == 0:
+            if idx % 100000 == 0:
                 log.info('finshed: {}, no_parent: {}, with_parent: {}'.format(idx, no_parent, with_parent))
-            break
     tfile.close()
     log.info('finished encode, no_parent: {}, with_parent: {}'.format(no_parent, with_parent))
 
