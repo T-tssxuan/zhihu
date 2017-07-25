@@ -139,6 +139,23 @@ class BinaryTopicProvider(TopicProvider):
         vecs = super(BinaryTopicProvider, self).test()
         return self._to_binary(vecs, class_idx)
 
+class TfidfDataProvider(DataProvider):
+    def __init__(self):
+        topic_file_path = DataPathConfig.get_question_tfidf_vec_path()
+        super(TfidfDataProvider, self).__init__(topic_file_path, '', False)
+
+    def _transform(self, vecs):
+        vecs = [[float(ele) for ele in vec] for vec in vecs]
+        return vecs
+
+    def next(self, batch_size):
+        vecs, _ = super(TfidfDataProvider, self).next(batch_size)
+        return self._transform(vecs)
+    
+    def test(self):
+        vecs, _ = super(TfidfDataProvider, self).test()
+        return self._transform(vecs)
+
 if __name__ == '__main__':
     lp = DataProvider(DataPathConfig.get_question_train_character_desc_set_path(),
                       DataPathConfig.get_char_embedding_path())

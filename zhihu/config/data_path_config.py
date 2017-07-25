@@ -41,6 +41,9 @@ class DataPathConfig:
     def get_topic_with_parent_propagate():
         return Tools.get_data_directory() + 'topic_with_parent_propagate.csv'
 
+    def get_question_tfidf_vec_path():
+        return Tools.get_data_directory() + 'tfidf.vec'
+
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
     print(DataPathConfig.get_topic_embedding_path())
