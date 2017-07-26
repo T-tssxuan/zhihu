@@ -128,8 +128,10 @@ class BinaryTopicProvider(TopicProvider):
 
     def _to_binary(self, vecs, class_idx):
         vecs = vecs[:, class_idx].reshape(-1, 1)
-        vecs = np.hstack([np.zeros((vecs.shape[0], 1)), vecs])
-        return vecs
+        tmp = np.zeros((vecs.shape[0], 2))
+        tmp[:, 0] += 1 - vecs
+        tmp[:, 1] += vecs
+        return tmp
 
     def next(self, batch_size, class_idx):
         vecs = super(BinaryTopicProvider, self).next(batch_size)
