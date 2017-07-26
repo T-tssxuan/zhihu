@@ -21,7 +21,7 @@ log = Tools.get_logger('dynamic_rnn')
 learning_rate = 0.001
 batch_size = 128
 topic_num = 1999
-num_hidden = 128
+num_hidden = 512
 
 def get_dynamic_rnn_graph(X, X_length, scope):
     with tf.variable_scope(scope):
@@ -69,7 +69,7 @@ lstm = tf.concat([word_desc_lstm, word_title_lstm, char_desc_lstm, char_title_ls
 lstm_mean = tf.reduce_mean(lstm)
 
 log.info('lstm({})'.format(lstm.shape))
-fc1 = tf.contrib.layers.fully_connected(inputs=lstm, num_outputs=1024)
+fc1 = tf.contrib.layers.fully_connected(inputs=lstm, num_outputs=4*num_hidden)
 log.info('fc1: {}'.format(fc1.shape))
 drop_fc1 = tf.nn.dropout(fc1, 0.5)
 log.info('drop_fc1: {}'.format(drop_fc1.shape))
@@ -102,8 +102,8 @@ log.info('begin char title init data provider')
 dp_char_title = DataProvider(DataPathConfig.get_question_train_character_title_set_path(),
                              DataPathConfig.get_char_embedding_path())
 log.info('begin topic init data provider')
-# dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
-dp_topic = PropagatedTopicProvider()
+dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
+# dp_topic = PropagatedTopicProvider()
 
 score = Score()
 log.info('begin train')
