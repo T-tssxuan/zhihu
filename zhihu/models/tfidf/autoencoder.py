@@ -8,7 +8,7 @@ from gensim import models,corpora
 import os 
 
 learning_rate = 0.001
-batch_size = 128
+batch_size = 64
 hidden_size = 5000
 
 log = Tools.get_logger('autoencoder')
