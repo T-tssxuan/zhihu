@@ -32,14 +32,12 @@ if __name__ == '__main__':
             print(data[0].sum(), data[1].sum())
             print(data.sum() / data.shape[0])
             print(data)
-    if sys.argv[1] == 'binary_provider' or sys.argv[1] == 'all':
-        tp = BinaryTopicProvider(DataPathConfig.get_question_topic_train_set_path())
-        for i in range(100):
-            for j in range(1999):
-                data = tp.next(10, j)
-                print(data[0].sum(), data[1].sum())
-                print(data.sum() / data.shape[0])
-                # print(data)
+    if sys.argv[1] == 'btp' or sys.argv[1] == 'all':
+        tp = BinaryTopicProvider()
+        for i in range(10):
+            data = tp.next(10, 730)
+            print(data)
+            print(tp.offset)
 
     if sys.argv[1] == 'ptp' or sys.argv[1] == 'all':
         ptp = PropagatedTopicProvider()

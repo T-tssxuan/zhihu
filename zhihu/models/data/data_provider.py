@@ -122,12 +122,12 @@ class PropagatedTopicProvider(DataProvider):
         sentences, _ = super(PropagatedTopicProvider, self).test()
         return self._one_hot(sentences, fixed_length)
 
-class BinaryTopicProvider(TopicProvider):
-    def __init__(self, topic_file_path):
-        super(BinaryTopicProvider, self).__init__(topic_file_path)
+class BinaryTopicProvider(PropagatedTopicProvider):
+    def __init__(self):
+        super(BinaryTopicProvider, self).__init__()
 
     def _to_binary(self, vecs, class_idx):
-        vecs = vecs[:, class_idx].reshape(-1, 1)
+        vecs = vecs[:, class_idx]
         tmp = np.zeros((vecs.shape[0], 2))
         tmp[:, 0] += 1 - vecs
         tmp[:, 1] += vecs
