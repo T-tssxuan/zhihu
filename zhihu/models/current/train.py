@@ -102,8 +102,8 @@ log.info('begin char title init data provider')
 dp_char_title = DataProvider(DataPathConfig.get_question_train_character_title_set_path(),
                              DataPathConfig.get_char_embedding_path())
 log.info('begin topic init data provider')
-# dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
-dp_topic = PropagatedTopicProvider()
+dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
+# dp_topic = PropagatedTopicProvider()
 
 score = Score()
 log.info('begin train')
