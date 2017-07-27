@@ -68,7 +68,7 @@ class DataProvider:
 
         return data, length
     
-    def test(self, fixed_length):
+    def test(self, fixed_length=0):
         f = open(self.data_file_path, 'r')
         f.readlines(self.end_pos)
         data, length = self._get_data(f, total - self.end_pos, fixed_length)
