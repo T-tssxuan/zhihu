@@ -35,14 +35,14 @@ def get_dynamic_rnn_graph(X, X_length, scope):
 
 log.info('begin init network')
 # feed desc word representation into the network
-X_word_desc_max_time = 60
+X_word_desc_max_time = 30
 X_word_desc = tf.placeholder(tf.float64, [batch_size, X_word_desc_max_time, 256], name='X_word_desc')
 X_word_desc_length = tf.placeholder(tf.int32, [batch_size], name='X_word_desc_length')
 word_desc_lstm = get_dynamic_rnn_graph(X_word_desc, X_word_desc_length, 'word_desc')
 log.info('word_desc_lstm({})'.format(word_desc_lstm.shape))
 
 # feed title word representation into the network
-X_word_title_max_time = 20
+X_word_title_max_time = 10
 X_word_title = tf.placeholder(tf.float64, [batch_size, X_word_title_max_time, 256], name='X_word_title')
 X_word_title_length = tf.placeholder(tf.int32, [batch_size], name='X_word_title_length')
 word_title_lstm = get_dynamic_rnn_graph(X_word_title, X_word_title_length, 'word_title')
@@ -140,7 +140,7 @@ with tf.Session() as sess:
             # log.info('drop_fc1_mean: {}'.format(_drop_fc1_mean))
             log.info('logits_mean: {}'.format(_logits_mean))
             avg = data_topic.sum() / data_topic.shape[0]
-            log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_char_title.offset, avg))
+            log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_word_desc.offset, avg))
             _score = score.score(_logits, data_topic)
             log.info('eval score: {}'.format(_score))
 
