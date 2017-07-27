@@ -116,6 +116,8 @@ test_word_title, test_word_title_length = dp_word_title.test(X_word_desc_max_tim
 test_topic = dp_topic.test()
 log.info('finished load test data')
 
+saver = tf.train.Saver()
+
 score = Score()
 log.info('begin train')
 with tf.Session() as sess:
@@ -163,5 +165,7 @@ with tf.Session() as sess:
                     }
             top_k = sess.run(top_k_indices, feed_dict=feed_dict)
             np.save('./preditc', top_k)
+        if i % 100000 == 0:
+            saver.save(sess, 'my_test_model',global_step=i)
 
 log.info('finished train')
