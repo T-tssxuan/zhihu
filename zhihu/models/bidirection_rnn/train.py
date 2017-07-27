@@ -18,7 +18,7 @@ from ..validate.score import Score
 
 log = Tools.get_logger('dynamic_rnn')
 
-learning_rate = 0.0001
+learning_rate = 0.001
 batch_size = 128
 topic_num = 1999
 num_hidden = 512
