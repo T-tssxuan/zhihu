@@ -110,7 +110,7 @@ dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
 
 log.info('begin load test data')
 test_word_desc, test_word_desc_length = dp_word_desc.test(X_word_desc_max_time)
-test_word_title, test_word_title_length = dp_word_title.test(X_word_desc_max_time)
+test_word_title, test_word_title_length = dp_word_title.test(X_word_title_max_time)
 # test_char_desc, test_char_desc_length = dp_char_desc.test()
 # test_char_title, test_char_title_length = dp_char_title.test()
 test_topic = dp_topic.test()
@@ -163,8 +163,11 @@ with tf.Session() as sess:
                     # X_char_title_length: test_char_title_length,
                     topics: test_topic 
                     }
-            top_k = sess.run(top_k_indices, feed_dict=feed_dict)
-            np.save('./preditc', top_k)
+            loss, _logits = sess.run([loss, logits], feed_dict=feed_dict)
+            log.info('------>{:.6f}'.format(loss))
+            _score = score.score(_logits, test_topic)
+            log.info('~~~~~~>{:.6f}'.format(loss))
+
         if i % 100000 == 0:
             saver.save(sess, 'my_test_model',global_step=i)
 
