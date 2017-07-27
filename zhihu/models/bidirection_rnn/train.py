@@ -145,7 +145,7 @@ with tf.Session() as sess:
             # log.info('drop_fc1_mean: {}'.format(_drop_fc1_mean))
             log.info('logits_mean: {}'.format(_logits_mean))
             avg = data_topic.sum() / data_topic.shape[0]
-            log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_char_title.offset, avg))
+            log.info('step: {}, loss: {:.6f}, offset: {}, avg: {:.4f}'.format(i, loss, dp_word_desc.offset, avg))
             _score = score.score(_logits, data_topic)
             log.info('eval score: {}'.format(_score))
 
