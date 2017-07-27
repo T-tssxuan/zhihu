@@ -163,10 +163,10 @@ with tf.Session() as sess:
                     # X_char_title_length: test_char_title_length,
                     topics: test_topic 
                     }
-            loss, _logits = sess.run([loss, logits], feed_dict=feed_dict)
+            loss, _logits = sess.run([cost, logits], feed_dict=feed_dict)
             log.info('------>{:.6f}'.format(loss))
             _score = score.score(_logits, test_topic)
-            log.info('~~~~~~>{:.6f}'.format(loss))
+            log.info('~~~~~~>{:.6f}'.format(_score))
 
         if i % 100000 == 0:
             saver.save(sess, 'my_test_model',global_step=i)
