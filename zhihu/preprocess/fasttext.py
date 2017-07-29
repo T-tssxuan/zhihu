@@ -21,7 +21,9 @@ def generate_doc():
         
         output.write(label + ' ' + content + '\n')
         if i % 300000 == 0:
-            log.info('finished {:.2f}'.format(i / TOTAL * 100))
+            log.info('finished {:.2f}%'.format(i * 100. / TOTAL))
+
+    log.info('finished {:.2f}%'.format(i * 100. / TOTAL))
 
     ftopic.close()
     fdesc.close()
