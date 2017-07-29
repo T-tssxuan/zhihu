@@ -8,6 +8,8 @@ class RawDataPathConfig:
         return Tools.get_raw_data_direcory() + 'question_train_set.txt'
     def get_question_topic_train_set_path():
         return Tools.get_raw_data_direcory() + 'question_topic_train_set.txt'
+    def get_question_eval_set_path():
+        return Tools.get_raw_data_direcory() + 'question_eval_set.txt'
 
 class DataPathConfig:
     def get_topic_desc_path():
@@ -46,6 +48,17 @@ class DataPathConfig:
 
     def get_question_fasttext_doc_path():
         return Tools.get_data_directory() + 'fasttext.txt'
+
+class EvalPathConfig:
+    def get_question_eval_word_title_set_path():
+        return Tools.get_data_directory() + 'question_eval_word_title_set.csv'
+    def get_question_eval_word_desc_set_path():
+        return Tools.get_data_directory() + 'question_eval_word_desc_set.csv'
+    def get_question_eval_character_title_set_path():
+        return Tools.get_data_directory() + 'question_eval_character_title_set.csv'
+    def get_question_eval_character_desc_set_path():
+        return Tools.get_data_directory() + 'question_eval_character_desc_set.csv'
+
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
