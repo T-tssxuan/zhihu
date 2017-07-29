@@ -12,8 +12,8 @@ def generate_doc():
     output = open(DataPathConfig.get_question_fasttext_doc_path(), 'w')
 
     for i in range(TOTAL):
-        desc = fdesc.readline()
-        title = ftitle.readline()
+        desc = ' '.join(fdesc.readline().rstrip().split(','))
+        title = ' '.join(ftitle.readline().rstrip().split(','))
         content = desc + ' ' + title
 
         topics = ftopic.readline().rstrip().split(',')
