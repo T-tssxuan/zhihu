@@ -46,8 +46,12 @@ class DataPathConfig:
     def get_question_tfidf_vec_path():
         return Tools.get_data_directory() + 'tfidf.vec'
 
-    def get_question_fasttext_doc_path():
-        return Tools.get_data_directory() + 'fasttext.txt'
+    def get_fasttext_train_word_path():
+        return Tools.get_data_directory() + 'fasttext_train_word.txt'
+    def get_fasttext_test_word_path():
+        return Tools.get_data_directory() + 'fasttext_test_word.txt'
+    def get_fasttext_test_topic_path():
+        return Tools.get_data_directory() + 'fasttext_test_topic.txt'
 
 class EvalPathConfig:
     def get_question_eval_word_title_set_path():
@@ -58,7 +62,8 @@ class EvalPathConfig:
         return Tools.get_data_directory() + 'question_eval_character_title_set.csv'
     def get_question_eval_character_desc_set_path():
         return Tools.get_data_directory() + 'question_eval_character_desc_set.csv'
-
+    def get_fasttext_eval_word_path():
+        return Tools.get_data_directory() + 'fasttext_eval_word.txt'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
