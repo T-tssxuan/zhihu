@@ -44,6 +44,9 @@ class DataPathConfig:
     def get_question_tfidf_vec_path():
         return Tools.get_data_directory() + 'tfidf.vec'
 
+    def get_question_fasttext_doc_path():
+        return Tools.get_data_directory() + 'fasttext.txt'
+
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())
     print(DataPathConfig.get_topic_embedding_path())
