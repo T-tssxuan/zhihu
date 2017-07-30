@@ -16,7 +16,7 @@ class FastText:
         cmd_path = dir_path + '/fastText/fasttext'
         self.train_cmd_fmt = cmd_path + ' supervised -input {} -output ' + model_prefix
 
-        setting = ' -epoch 50 -thread 20 -dim 256 '
+        setting = ' -epoch 200 -thread 30 -dim 100 '
         self.train_cmd_fmt += setting
 
         model_path = dir_path + '/model/model.bin'
