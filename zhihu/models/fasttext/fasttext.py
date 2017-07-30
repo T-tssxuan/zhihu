@@ -8,24 +8,23 @@ from ...utils.tools import Tools
 from ..validate.score import Score
 from ..data.eval_result_generator import EvalResultGenerator
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-
 log = Tools.get_logger('FastText')
 
 class FastText:
-    def __init__(self, category='word'):
-        model_prefix = dir_path + '/model/model'
-        cmd_path = dir_path + '/fastText/fasttext'
+    def __init__(self, dir_path, category='word', epoch=100, thread=30, dim=128, model='model'):
+        self.dir_path = dir_path
+        model_prefix = self.dir_path + '/model/' + model
+        cmd_path = os.path.dirname(os.path.realpath(__file__)) + '/fastText/fasttext'
         self.train_cmd_fmt = cmd_path + ' supervised -input {} -output ' + model_prefix
 
-        setting = ' -epoch 150 -thread 30 -dim 128 '
+        setting = ' -epoch {} -thread {} -dim {} '.format(epoch, thread, dim)
         self.train_cmd_fmt += setting
 
-        model_path = dir_path + '/model_100_128/model.bin'
+        model_path = self.dir_path + '/model/' + model + '.bin'
         self.predict_cmd_fmt = cmd_path + ' predict ' + model_path + ' {} {} > {}'
 
-        self.test_output_file = dir_path + '/data/test.txt'
-        self.eval_output_file = dir_path + '/data/eval.txt'
+        self.test_output_file = self.dir_path + '/data/test.txt'
+        self.eval_output_file = self.dir_path + '/data/eval.txt'
 
         self.train_data = DataPathConfig.get_fasttext_train_word_path()
         self.test_data = DataPathConfig.get_fasttext_test_word_path()
@@ -33,7 +32,7 @@ class FastText:
         if category == 'char':
             self.train_data = DataPathConfig.get_fasttext_train_char_path()
             self.test_data = DataPathConfig.get_fasttext_test_char_path()
-            self.eval_data = EvalPathConfig.get_fasttext_eval_char_path()
+            self.eval_data = EvalPathConfig.get_fasttext_eval_character_path()
 
     def train(self):
         cmd = self.train_cmd_fmt.format(self.train_data)
@@ -55,9 +54,9 @@ class FastText:
                     f.write(line.decode())
         log.info('finished format data')
 
-    def test(self):
+    def test(self, topk=5):
         log.info('generate test result')
-        cmd = self.predict_cmd_fmt.format(self.test_data, 4, self.test_output_file)
+        cmd = self.predict_cmd_fmt.format(self.test_data, topk, self.test_output_file)
         log.info(cmd)
         os.system(cmd)
         log.info('finished generate test result')
@@ -81,9 +80,9 @@ class FastText:
         score = Score(topk=5)
         return score.vanilla_score(pre, src)
 
-    def eval(self):
+    def eval(self, topk=5):
         log.info('begin generate eval result')
-        cmd = self.predict_cmd_fmt.format(self.eval_data, 4, self.eval_output_file)
+        cmd = self.predict_cmd_fmt.format(self.eval_data, topk, self.eval_output_file)
         log.info(cmd)
         os.system(cmd)
         self._output_format(self.eval_output_file)
@@ -94,7 +93,8 @@ class FastText:
         log.info('finished generate eval result')
         
 if __name__ == '__main__':
-    ft = FastText();
+    cur_path = os.path.dirname(os.path.realpath(__file__))
+    ft = FastText('word', cur_path);
     ft.train()
     ft.test()
     ft.eval()

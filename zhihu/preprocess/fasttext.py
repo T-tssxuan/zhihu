@@ -4,12 +4,31 @@ from ..utils.tools import Tools
 
 log = Tools.get_logger('fasttext preprocess')
 
-def generate_eval_data():
-    EVAL_SIZE = 217360
-    fdesc = open(EvalPathConfig.get_question_eval_word_desc_set_path(), 'r')
-    ftitle = open(EvalPathConfig.get_question_eval_word_title_set_path(), 'r')
+def generate_word_eval():
+    log.info('generate_word_eval')
+    generate_eval_data(
+            EvalPathConfig.get_question_eval_word_desc_set_path(),
+            EvalPathConfig.get_question_eval_word_title_set_path(),
+            EvalPathConfig.get_fasttext_eval_word_path()
+            )
+    log.info('finished generate_word_eval')
 
-    feval = open(EvalPathConfig.get_fasttext_eval_word_path(), 'w')
+def generate_char_eval():
+    log.info('generate_char_eval')
+    generate_eval_data(
+            EvalPathConfig.get_question_eval_character_desc_set_path(),
+            EvalPathConfig.get_question_eval_character_title_set_path(),
+            EvalPathConfig.get_fasttext_eval_character_path()
+            )
+    log.info('finished generate_char_eval')
+
+
+def generate_eval_data(desc_path, title_path, eval_path):
+    EVAL_SIZE = 217360
+    fdesc = open(desc_path, 'r')
+    ftitle = open(title_path, 'r')
+
+    feval = open(eval_path, 'w')
 
     log.info('generate eval data')
     idx = 0
@@ -101,4 +120,5 @@ def generate_train_data(desc_path, title_path, topic_path, train_path,
 if __name__ == '__main__':
     generate_char_train()
     generate_word_train()
-    generate_eval_data()
+    generate_char_eval()
+    generate_word_eval()
