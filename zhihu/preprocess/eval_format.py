@@ -15,6 +15,8 @@ def format_question_data():
     q_c_title_out = open(EvalPathConfig.get_question_eval_character_title_set_path(), 'w')
     q_c_desc_out = open(EvalPathConfig.get_question_eval_character_desc_set_path(), 'w')
 
+    eval_tid = open(EvalPathConfig.get_eval_tid_path(), 'w')
+
     missed_match_count = 0
 
     t0 = time()
@@ -30,6 +32,7 @@ def format_question_data():
 
         q_items = q_l.rstrip('\n').split('\t')
 
+        eval_tid.write(q_items[0] + '\n')
         q_c_title_out.write(q_items[1] + '\n')
         q_c_desc_out.write(q_items[3] + '\n')
         q_w_title_out.write(q_items[2] + '\n')
@@ -38,6 +41,7 @@ def format_question_data():
 
     q_in.close()
 
+    eval_tid.close()
     q_w_title_out.close()
     q_w_desc_out.close()
     q_c_title_out.close()

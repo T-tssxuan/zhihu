@@ -64,6 +64,11 @@ class EvalPathConfig:
         return Tools.get_data_directory() + 'question_eval_character_desc_set.csv'
     def get_fasttext_eval_word_path():
         return Tools.get_data_directory() + 'fasttext_eval_word.txt'
+    def get_eval_tid_path():
+        return Tools.get_data_directory() + 'eval_tid.txt'
+
+    def get_eval_result_path():
+        return Tools.get_data_directory() + 'eval_result.csv'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())

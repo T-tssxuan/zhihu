@@ -38,6 +38,10 @@ class Score:
 
         return (precision * recall) / max((precision + recall), 0.000001)
 
+    def vanilla_score(self, pre, src):
+        merged = [(list(set(a[:self.topk])), list(set(b))) for a, b in zip(pre, src)]
+        return self._eval(merged)
+
     def score(self, pre, src):
         pre = np.array(pre)
         pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
