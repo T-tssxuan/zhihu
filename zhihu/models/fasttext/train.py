@@ -81,7 +81,7 @@ class FastText:
 
     def eval(self):
         log.info('begin generate eval result')
-        cmd = self.predict_cmd_fmt.format(self.test_data, 5, self.eval_output_file)
+        cmd = self.predict_cmd_fmt.format(self.eval_data, 5, self.eval_output_file)
         log.info(cmd)
         os.system(cmd)
         self._output_format(self.eval_output_file)
