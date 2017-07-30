@@ -94,5 +94,5 @@ class FastText:
 if __name__ == '__main__':
     ft = FastText();
     # ft.train()
-    # ft.test()
+    ft.test()
     ft.eval()
