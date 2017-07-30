@@ -64,7 +64,9 @@ def generate_train_data():
         content = desc + ' ' + title
         ftest.write(content + '\n')
 
-        ftest_topic.write(ftopic.readline())
+        topics = ftopic.readline().rstrip().split(',')
+        label = ' '.join(['__label__' + topic for topic in topics])
+        ftest_topic.write(label + '\n')
 
     log.info('finished test data')
     ftopic.close()
