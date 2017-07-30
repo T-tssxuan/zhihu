@@ -30,7 +30,7 @@ class FastTextWord:
         log.info('end eval')
 
 if __name__ == '__main__':
-    ftc = FastTextWord(epoch=5, thread=12)
-    ftc.train()
+    ftc = FastTextWord(epoch=150, thread=12, dim=128)
+    # ftc.train()
     ftc.test()
     ftc.eval()

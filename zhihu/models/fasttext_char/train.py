@@ -30,7 +30,7 @@ class FastTextChar:
         log.info('end eval')
 
 if __name__ == '__main__':
-    ftc = FastTextChar(epoch=5, thread=12)
+    ftc = FastTextChar(epoch=200, thread=30)
     ftc.train()
     ftc.test()
     ftc.eval()
