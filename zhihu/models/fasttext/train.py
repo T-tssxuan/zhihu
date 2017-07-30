@@ -18,7 +18,7 @@ class FastText:
         cmd_path = dir_path + '/fastText/fasttext'
         self.train_cmd_fmt = cmd_path + ' supervised -input {} -output ' + model_prefix
 
-        setting = ' -epoch 200 -thread 30 -dim 100 '
+        setting = ' -epoch 150 -thread 30 -dim 128 '
         self.train_cmd_fmt += setting
 
         model_path = dir_path + '/model_100_128/model.bin'
@@ -55,7 +55,7 @@ class FastText:
 
     def test(self):
         log.info('generate test result')
-        cmd = self.predict_cmd_fmt.format(self.test_data, 5, self.test_output_file)
+        cmd = self.predict_cmd_fmt.format(self.test_data, 4, self.test_output_file)
         log.info(cmd)
         os.system(cmd)
         log.info('finished generate test result')
@@ -81,7 +81,7 @@ class FastText:
 
     def eval(self):
         log.info('begin generate eval result')
-        cmd = self.predict_cmd_fmt.format(self.eval_data, 5, self.eval_output_file)
+        cmd = self.predict_cmd_fmt.format(self.eval_data, 4, self.eval_output_file)
         log.info(cmd)
         os.system(cmd)
         self._output_format(self.eval_output_file)
@@ -93,6 +93,6 @@ class FastText:
         
 if __name__ == '__main__':
     ft = FastText();
-    # ft.train()
+    ft.train()
     ft.test()
     ft.eval()

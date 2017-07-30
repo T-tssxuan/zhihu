@@ -30,3 +30,7 @@ topic_cout:
     all_not_leave: 851451
     the_two: 1370348
 ```
+
+## Fasttext
+1. 100 epcho, 128 dim, top 5, test_score: 0.30873630009518516, eval_score: 0.340780112005972
+2. 100 epcho, 128 dim, top 4, test_score: 0.29067849355971903, eval_score: 0.313753920186513
