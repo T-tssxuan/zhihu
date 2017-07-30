@@ -50,6 +50,10 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'fasttext_train_word.txt'
     def get_fasttext_test_word_path():
         return Tools.get_data_directory() + 'fasttext_test_word.txt'
+    def get_fasttext_train_char_path():
+        return Tools.get_data_directory() + 'fasttext_train_char.txt'
+    def get_fasttext_test_char_path():
+        return Tools.get_data_directory() + 'fasttext_test_char.txt'
     def get_fasttext_test_topic_path():
         return Tools.get_data_directory() + 'fasttext_test_topic.txt'
 

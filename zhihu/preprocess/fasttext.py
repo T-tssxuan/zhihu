@@ -20,7 +20,7 @@ def generate_eval_data():
         feval.write(content + '\n')
         idx += 1
 
-        if idx % 100000 == 0:
+        if idx % 30000 == 0:
             log.info('finished {}'.format(idx))
 
     log.info('finished all {}'.format(idx))
@@ -28,18 +28,43 @@ def generate_eval_data():
     ftitle.close()
     feval.close()
 
-def generate_train_data():
+def generate_word_train():
+    log.info('generate_word_train')
+    generate_train_data(
+            DataPathConfig.get_question_train_word_desc_set_path(),
+            DataPathConfig.get_question_train_word_title_set_path(),
+            DataPathConfig.get_question_topic_train_set_path(),
+            DataPathConfig.get_fasttext_train_word_path(),
+            DataPathConfig.get_fasttext_test_word_path(),
+            DataPathConfig.get_fasttext_test_topic_path()
+            )
+    log.info('finshed generate_word_train')
+
+def generate_char_train():
+    log.info('generate_char_train')
+    generate_train_data(
+            DataPathConfig.get_question_train_character_desc_set_path(),
+            DataPathConfig.get_question_train_character_title_set_path(),
+            DataPathConfig.get_question_topic_train_set_path(),
+            DataPathConfig.get_fasttext_train_char_path(),
+            DataPathConfig.get_fasttext_test_char_path(),
+            DataPathConfig.get_fasttext_test_topic_path()
+            )
+    log.info('finished generate_char_train')
+
+def generate_train_data(desc_path, title_path, topic_path, train_path,
+        test_path, test_topic_path):
     TOTAL = 2999967
     TEST_SIZE = 10000
 
-    fdesc = open(DataPathConfig.get_question_train_word_desc_set_path(), 'r')
-    ftitle = open(DataPathConfig.get_question_train_word_title_set_path(), 'r')
-    ftopic = open(DataPathConfig.get_question_topic_train_set_path(), 'r')
+    fdesc = open(desc_path, 'r')
+    ftitle = open(title_path, 'r')
+    ftopic = open(topic_path, 'r')
 
-    ftrain = open(DataPathConfig.get_fasttext_train_word_path(), 'w')
+    ftrain = open(train_path, 'w')
 
-    ftest = open(DataPathConfig.get_fasttext_test_word_path(), 'w')
-    ftest_topic = open(DataPathConfig.get_fasttext_test_topic_path(), 'w')
+    ftest = open(test_path, 'w')
+    ftest_topic = open(test_topic_path, 'w')
 
     log.info('get train data')
     for i in range(TOTAL - TEST_SIZE):
@@ -74,5 +99,6 @@ def generate_train_data():
     ftest_topic.close()
 
 if __name__ == '__main__':
-    generate_train_data()
+    generate_char_train()
+    generate_word_train()
     generate_eval_data()
