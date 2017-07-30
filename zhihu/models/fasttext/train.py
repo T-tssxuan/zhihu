@@ -31,7 +31,9 @@ class FastText:
         self.test_data = DataPathConfig.get_fasttext_test_word_path()
         self.eval_data = EvalPathConfig.get_fasttext_eval_word_path()
         if category == 'char':
-            pass
+            self.train_data = DataPathConfig.get_fasttext_train_char_path()
+            self.test_data = DataPathConfig.get_fasttext_test_char_path()
+            self.eval_data = EvalPathConfig.get_fasttext_eval_char_path()
 
     def train(self):
         cmd = self.train_cmd_fmt.format(self.train_data)
