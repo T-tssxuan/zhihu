@@ -11,13 +11,14 @@ from ..data.eval_result_generator import EvalResultGenerator
 log = Tools.get_logger('FastText')
 
 class FastText:
-    def __init__(self, dir_path, category='word', epoch=100, thread=30, dim=128, model='model'):
+    def __init__(self, dir_path, category='word', epoch=100, thread=30, dim=128,
+            lr=0.05, model='model'):
         self.dir_path = dir_path
         model_prefix = self.dir_path + '/model/' + model
         cmd_path = os.path.dirname(os.path.realpath(__file__)) + '/fastText/fasttext'
         self.train_cmd_fmt = cmd_path + ' supervised -input {} -output ' + model_prefix
 
-        setting = ' -epoch {} -thread {} -dim {} '.format(epoch, thread, dim)
+        setting = ' -epoch {} -thread {} -dim {} -lr {} '.format(epoch, thread, dim, lr)
         self.train_cmd_fmt += setting
 
         model_path = self.dir_path + '/model/' + model + '.bin'
