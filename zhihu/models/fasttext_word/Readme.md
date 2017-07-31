@@ -45,3 +45,6 @@ loss: 7.072792, test_cost: 0.27963886436052837
 ## char 1 epoch, 100 dim, 0.8 lr, 100 update
 loss: 6.972493 test_score: 0.2929851977255442
 
+## char 5 epoch, 128 dim, 0.8 lr, 1000 updata
+loss: 6.804862, test_score: 0.29580718422283886
+

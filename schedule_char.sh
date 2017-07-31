@@ -1,3 +1,4 @@
+set -e
 echo ''
 python3 -m zhihu.models.fasttext_char.train 5 30 128 0.8 100
 python3 -m zhihu.models.fasttext_char.train 5 30 256 0.8 100
