@@ -35,6 +35,7 @@ topic_cout:
 1. 100 epcho, 128 dim, top 5, test_score: 0.30873630009518516, eval_score: 0.340780112005972, model_loss: 3.733466
 2. 100 epcho, 128 dim, top 4, test_score: 0.29067849355971903, eval_score: 0.313753920186513, model_loss: 3.733466
 3. 150 epcho, 128 dim, top 5, test_score: 0.2970169906346943, eval_score: 0.329263720847297, model_loss: 3.526699
+4. 5 epoch, 100 dim, top 5, test_score: 0.329319208558269, eval_score: 0.362809997222741, model_loss: 5.591572, lr: 0.5
 
 ## Fasttext Char
 1. 200 epcho, 256 dim, top 5

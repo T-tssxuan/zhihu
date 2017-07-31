@@ -75,8 +75,10 @@ class EvalPathConfig:
     def get_eval_tid_path():
         return Tools.get_data_directory() + 'eval_tid.txt'
 
-    def get_eval_result_path():
-        return Tools.get_data_directory() + 'eval_result.csv'
+    def get_eval_result_path(suffix=''):
+        if not os.path.exists(Tools.get_data_directory() + '/result/'):
+            os.mkdir(Tools.get_data_directory() + '/result/')
+        return Tools.get_data_directory() + '/result/eval_result_' + suffix + '.csv'
 
 if __name__ == '__main__':
     print(DataPathConfig.get_raw_topic_info_path())

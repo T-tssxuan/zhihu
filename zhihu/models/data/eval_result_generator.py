@@ -9,12 +9,14 @@ class EvalResultGenerator:
     def __init__(self):
         pass
 
-    def generate(self, path):
+    def generate(self, path, suffix=''):
         log.info('begin')
 
         fpre = open(path, 'r')
         ftid = open(EvalPathConfig.get_eval_tid_path(), 'r')
-        fresult = open(EvalPathConfig.get_eval_result_path(), 'w')
+        outpath = EvalPathConfig.get_eval_result_path(suffix)
+        fresult = open(outpath, 'w')
+        log.info('outpath: {}'.format(outpath))
         while True:
             pre = fpre.readline().rstrip()
             tid = ftid.readline().rstrip()
