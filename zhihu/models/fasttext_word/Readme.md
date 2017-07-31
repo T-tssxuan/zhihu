@@ -14,3 +14,10 @@ Progress: 100.0%  words/sec/thread: 95184  lr: 0.000000  loss: 2.859551  eta: 0h
 
 ## 150 epoch, 128 dim
 Progress: 100.0%  words/sec/thread: 83580  lr: 0.000000  loss: 3.526699  eta: 0h0m
+
+# char 200, 128, 30
+Progress: 100.0%  words/sec/thread: 147293  lr: 0.000000  loss: 5.030945  eta: 0h0m
+
+# char 300 epoch, 256 dim, 30
+Progress: 100.0%  words/sec/thread: 87671  lr: 0.000000  loss: 4.593506  eta: 0h0m  -14m
+
