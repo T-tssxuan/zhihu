@@ -25,7 +25,7 @@ class FastText:
         model_path = self.dir_path + '/model/' + model + '.bin'
         self.predict_cmd_fmt = cmd_path + ' predict ' + model_path + ' {} {} > {}'
 
-        self.test_output_file = self.dir_path + '/data/test.txt'
+        self.test_output_file = self.dir_path + '/data/test_' + self.suffix + '.txt'
         self.eval_output_file = self.dir_path + '/data/eval.txt'
 
         self.train_data = DataPathConfig.get_fasttext_train_word_path()
