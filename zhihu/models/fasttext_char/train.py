@@ -43,6 +43,9 @@ if __name__ == '__main__':
                            dim=dim,
                            lr=lr,
                            update_rate=update_rate)
-    ftc.train()
-    ftc.test()
-    ftc.eval()
+    if sys.argv[6] == 'train' or sys.argv[6] == 'all':
+        ftc.train()
+    if sys.argv[6] == 'test' or sys.argv[6] == 'all':
+        ftc.test()
+    if sys.argv[6] == 'eval' or sys.argv[6] == 'all':
+        ftc.eval()
