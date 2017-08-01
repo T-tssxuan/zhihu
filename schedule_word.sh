@@ -1,17 +1,17 @@
-set -e
-echo ''
-python3 -m zhihu.models.fasttext_word.train 5 30 128 0.8 100
-python3 -m zhihu.models.fasttext_word.train 5 30 256 0.8 100
-python3 -m zhihu.models.fasttext_word.train 5 30 512 0.8 100
-
-echo ''
-python3 -m zhihu.models.fasttext_word.train 10 30 100 0.1 100
-python3 -m zhihu.models.fasttext_word.train 10 30 100 0.2 200
-python3 -m zhihu.models.fasttext_word.train 10 30 100 0.3 100
-python3 -m zhihu.models.fasttext_word.train 10 30 100 0.4 300
-
-echo ''
-python3 -m zhihu.models.fasttext_word.train 10 30 512 1 100
+# set -e
+# echo ''
+# python3 -m zhihu.models.fasttext_word.train 5 30 128 0.8 100
+# python3 -m zhihu.models.fasttext_word.train 5 30 256 0.8 100
+# python3 -m zhihu.models.fasttext_word.train 5 30 512 0.8 100
+#
+# echo ''
+# python3 -m zhihu.models.fasttext_word.train 10 30 100 0.1 100
+# python3 -m zhihu.models.fasttext_word.train 10 30 100 0.2 200
+# python3 -m zhihu.models.fasttext_word.train 10 30 100 0.3 100
+# python3 -m zhihu.models.fasttext_word.train 10 30 100 0.4 300
+#
+# echo ''
+# python3 -m zhihu.models.fasttext_word.train 10 30 512 1 100
 python3 -m zhihu.models.fasttext_word.train 5 30 128 0.5 100
 python3 -m zhihu.models.fasttext_word.train 5 30 128 0.8 500
 python3 -m zhihu.models.fasttext_word.train 5 30 128 0.8 1000
