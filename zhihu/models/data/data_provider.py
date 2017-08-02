@@ -68,10 +68,12 @@ class DataProvider:
 
         return data, length
     
-    def test(self, fixed_length=0):
+    def test(self, size=0, fixed_length=0):
         f = open(self.data_file_path, 'r')
         f.readlines(self.end_pos)
-        data, length = self._get_data(f, total - self.end_pos, fixed_length)
+        if size == 0:
+            size = total - self.end_pos
+        data, length = self._get_data(f, size, fixed_length)
         return data, length
 
 class TopicProvider(DataProvider):
@@ -95,8 +97,10 @@ class TopicProvider(DataProvider):
         sentences, _ = super(TopicProvider, self).next(batch_size)
         return self._one_hot(sentences, fixed_length)
     
-    def test(self, fixed_length=0):
-        sentences, _ = super(TopicProvider, self).test()
+    def test(self, size=0, fixed_length=0):
+        sentences, _ = super(TopicProvider, self).test(
+                size=size, 
+                fixed_length=fixed_length)
         return self._one_hot(sentences, fixed_length)
 
 class PropagatedTopicProvider(DataProvider):
@@ -118,8 +122,9 @@ class PropagatedTopicProvider(DataProvider):
         sentences, _ = super(PropagatedTopicProvider, self).next(batch_size)
         return self._one_hot(sentences, fixed_length)
     
-    def test(self, fixed_length=0):
-        sentences, _ = super(PropagatedTopicProvider, self).test()
+    def test(self, size=0, fixed_length=0):
+        sentences, _ = super(PropagatedTopicProvider, self).test(
+                size=size, fixed_length=fixed_length)
         return self._one_hot(sentences, fixed_length)
 
 class BinaryTopicProvider(PropagatedTopicProvider):
@@ -137,8 +142,9 @@ class BinaryTopicProvider(PropagatedTopicProvider):
         vecs = super(BinaryTopicProvider, self).next(batch_size)
         return self._to_binary(vecs, class_idx)
     
-    def test(self, class_idx):
-        vecs = super(BinaryTopicProvider, self).test()
+    def test(self, class_idx, size=0, fixed_length=0):
+        vecs = super(BinaryTopicProvider, self).test(
+                size=size, fixed_length=fixed_length)
         return self._to_binary(vecs, class_idx)
 
 class TfidfDataProvider(DataProvider):
@@ -154,8 +160,9 @@ class TfidfDataProvider(DataProvider):
         vecs, _ = super(TfidfDataProvider, self).next(batch_size)
         return self._transform(vecs)
     
-    def test(self):
-        vecs, _ = super(TfidfDataProvider, self).test()
+    def test(self, size=0, fixed_length=0):
+        vecs, _ = super(TfidfDataProvider, self).test(
+                size=size, fixed_length=fixed_length)
         return self._transform(vecs)
 
 if __name__ == '__main__':
