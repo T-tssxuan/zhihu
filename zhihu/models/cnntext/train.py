@@ -11,6 +11,7 @@ learning_rate = 0.001
 batch_size = 128
 topic_num = 1999
 show_step = 100
+test_size = 100
 
 log.info('begin init network')
 # feed desc word representation into the network
@@ -31,20 +32,20 @@ cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate)
 # init the data providers
 log.info('load topic')
 dp_topic = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
-data_topic_test = dp_topic.test(100, topic_num)
+data_topic_test = dp_topic.test(test_size, topic_num)
 log.info('data_topic_test: {}'.format(data_topic_test.shape))
 
 log.info('begin word desc data provider')
 dp_word_desc = DataProvider(DataPathConfig.get_question_train_word_desc_set_path(),
                             DataPathConfig.get_word_embedding_path())
 log.info('begin word desc test data')
-data_word_desc_test, _ = dp_word_desc.test(100, X_word_desc_len)
+data_word_desc_test, _ = dp_word_desc.test(test_size, X_word_desc_len)
 
 log.info('begin word title init data provider')
 dp_word_title = DataProvider(DataPathConfig.get_question_train_word_title_set_path(),
                              DataPathConfig.get_word_embedding_path())
 log.info('begin word title test data')
-data_word_title_test, _ = dp_word_title.test(10000, X_word_title_len)
+data_word_title_test, _ = dp_word_title.test(test_size, X_word_title_len)
 
 
 score = Score()
