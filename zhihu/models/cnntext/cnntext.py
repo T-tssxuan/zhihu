@@ -7,7 +7,7 @@ log = Tools.get_logger('CNNText')
 class CNNText:
     def __init__(self, X, y, 
             class_num=1999, 
-            kernel_lens=[2, 3, 4, 5], 
+            kernel_lens=[3, 4, 5, 6], 
             num_outputs=512, 
             embedding_size=256,
             learning_rate=0.01,
@@ -62,7 +62,7 @@ class CNNText:
                     kernel_size=[kernel_len, self.embedding_size], 
                     stride=1,
                     weights_regularizer=regularizer,
-                    biases_regularizer=regularizer,
+                    # biases_regularizer=regularizer,
                     padding='VALID')
             shape = cnn.shape
             log.info('shape: {}'.format(shape))

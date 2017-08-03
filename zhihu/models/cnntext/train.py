@@ -9,7 +9,7 @@ from .cnntext import CNNText
 log = Tools.get_logger('cnn text')
 learning_rate = 0.001
 batch_size = 128
-topic_num = 1999
+topic_num = 2
 show_step = 100
 test_size = 100
 
@@ -72,6 +72,7 @@ with tf.Session() as sess:
                       }
             cost, logits = sess.run([cnntext.cost, cnntext.logits], feed_dict=feed_dict)
             avg = data_topic.sum() / data_topic.shape[0]
+            log.info('logits: {}'.format(logits))
             log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, cost, dp_word_desc.offset, avg))
             _score = score.score(logits, data_topic)
             log.info('eval score: {}'.format(_score))
