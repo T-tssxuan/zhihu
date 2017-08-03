@@ -81,8 +81,6 @@ with tf.Session() as sess:
             cost, logits, summary = sess.run([cnntext.cost, cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
             summary_writer.add_summary(summary, i)
 
-            mean = np.mean(logits)
-            print(mean)
             avg = data_topic.sum() / data_topic.shape[0]
             # for l in logits:
             #     print(' '.join([str(e) for e in l]))
