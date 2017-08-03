@@ -8,7 +8,7 @@ class CNNText:
     def __init__(self, X, y, 
             class_num=1999, 
             kernel_lens=[3, 4, 5, 6], 
-            num_outputs=256, 
+            num_outputs=512, 
             embedding_size=256,
             learning_rate=0.01,
             regularizer_scale=0.1):
