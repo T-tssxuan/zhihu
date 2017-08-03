@@ -4,6 +4,12 @@ import sys
 
 class Tools:
     log_file = ''
+    def get_tf_summary_path():
+        path = Tools.get_project_directory() + '/tfboard/'
+        if not os.path.exists(path):
+            os.mkdir(path)
+        return path
+
     def get_project_directory():
         return os.getcwd() + '/zhihu/'
 

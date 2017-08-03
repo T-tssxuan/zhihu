@@ -6,11 +6,13 @@ from ...utils.tools import Tools
 from ..validate.score import Score
 from .cnntext import CNNText
 
+summary_path = Tools.get_tf_summary_path()
+
 log = Tools.get_logger('cnn text')
 learning_rate = 0.001
 batch_size = 128
 topic_num = 1999
-show_step = 100
+show_step = 10
 test_size = 10
 
 log.info('begin init network')
@@ -53,6 +55,7 @@ log.info('begin train')
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
+    summary_writer = tf.summary.FileWriter(summary_path, sess.graph)
     for i in range(10000000):
         data_word_desc, _ = dp_word_desc.next(batch_size, X_word_desc_len)
         data_word_title, _ = dp_word_title.next(batch_size, X_word_title_len)
@@ -70,7 +73,9 @@ with tf.Session() as sess:
                        X_word_title: data_word_title_test,
                        y: data_topic_test 
                       }
-            cost, logits = sess.run([cnntext.cost, cnntext.logits], feed_dict=feed_dict)
+            cost, logits, summary = sess.run([cnntext.cost, cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
+            summary_writer.add_summary(summary, i)
+
             avg = data_topic.sum() / data_topic.shape[0]
             # for l in logits:
             #     print(' '.join([str(e) for e in l]))
@@ -78,6 +83,7 @@ with tf.Session() as sess:
             log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, cost, dp_word_desc.offset, avg))
             _score = score.score(logits, data_topic_test)
             log.info('eval score: {}'.format(_score))
+    summary_writer.close()
 
 log.info('finished train')
 

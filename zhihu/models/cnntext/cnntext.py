@@ -8,7 +8,7 @@ class CNNText:
     def __init__(self, X, y, 
             class_num=1999, 
             kernel_lens=[3, 4, 5, 6], 
-            num_outputs=512, 
+            num_outputs=256, 
             embedding_size=256,
             learning_rate=0.01,
             regularizer_scale=0.1):
@@ -35,13 +35,13 @@ class CNNText:
         cnn_output = tf.concat(pools, axis=3)
         log.info('cnn_output: {}'.format(cnn_output.shape))
         
-        h_cnn = tf.reshape(cnn_output, shape=[-1, len(self.kernel_lens) * self.num_outputs])
-        log.info('h_cnn: {}'.format(h_cnn.shape))
+        self.h_cnn = tf.reshape(cnn_output, shape=[-1, len(self.kernel_lens) * self.num_outputs])
+        log.info('h_cnn: {}'.format(self.h_cnn.shape))
 
         # h_cnn_dropout = tf.layers.dropout(h_cnn, 0.5)
 
         self.logits = tf.contrib.layers.fully_connected(
-                inputs=h_cnn,
+                inputs=self.h_cnn,
                 num_outputs=self.class_num)
         log.info('logits: {}'.format(self.logits.shape))
 
@@ -50,7 +50,9 @@ class CNNText:
                                                         logits=self.logits),
                 name='cost'
                 )
+        tf.summary.scalar("cost", self.cost)
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.cost)
+        self.summary_op = tf.summary.merge_all()
     
     def _get_conv_layer(self, kernel_len):
         with tf.variable_scope('kernel_{}'.format(kernel_len)):
