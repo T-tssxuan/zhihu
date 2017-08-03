@@ -47,6 +47,8 @@ class Score:
         pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
         src = np.array(src)
         src = [list(np.where(ele > 0)[0]) for ele in src]
+        print(pre)
+        print(src)
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 
