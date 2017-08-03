@@ -60,23 +60,12 @@ class CNNText:
     def _get_conv_layer(self, kernel_len):
         with tf.variable_scope('kernel_{}'.format(kernel_len)) as s:
             log.info('kernel_{}'.format(kernel_len))
-            # cnn = tf.contrib.layers.conv2d(
-            #         inputs=self.X, 
-            #         num_outputs=self.num_outputs, 
-            #         kernel_size=[kernel_len, self.embedding_size], 
-            #         stride=1,
-            #         padding='VALID')
-            filter_shape = [kernel_len, self.embedding_size, 1, self.num_outputs]
-            W = tf.Variable(tf.truncated_normal(filter_shape, stddev=0.1), name="W")
-            b = tf.Variable(tf.constant(0.1, shape=[self.num_outputs]), name="b")
-            conv = tf.nn.conv2d(
-                    self.X,
-                    W,
-                    strides=[1, 1, 1, 1],
-                    padding="VALID",
-                    name="conv")
-            # Apply nonlinearity
-            cnn = tf.nn.relu(tf.nn.bias_add(conv, b), name="relu")
+            cnn = tf.contrib.layers.conv2d(
+                    inputs=self.X, 
+                    num_outputs=self.num_outputs, 
+                    kernel_size=[kernel_len, self.embedding_size], 
+                    stride=1,
+                    padding='VALID')
             shape = cnn.shape
             log.info('shape: {}'.format(shape))
             pool = tf.nn.max_pool(

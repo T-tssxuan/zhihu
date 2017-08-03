@@ -12,14 +12,14 @@ log = Tools.get_logger('FastText')
 
 class FastText:
     def __init__(self, dir_path, category='word', epoch=100, thread=30, dim=128,
-            lr=0.05, update_rate=100, model='model'):
-        self.suffix = '{}_{}_{}_{:.2f}_{}'.format(category, epoch, dim, lr, update_rate)
+            lr=0.05, update_rate=100, ws=5, neg=5, model='model'):
+        self.suffix = '{}_{}_{}_{:.2f}_{}_{}_{}'.format(category, epoch, dim, lr, update_rate, ws, neg)
         self.dir_path = dir_path
         model_prefix = self.dir_path + '/model/' + model
         cmd_path = os.path.dirname(os.path.realpath(__file__)) + '/fastText/fasttext'
         self.train_cmd_fmt = cmd_path + ' supervised -input {} -output ' + model_prefix
 
-        setting = ' -epoch {} -thread {} -dim {} -lr {} -lrUpdateRate {} '.format(epoch, thread, dim, lr, update_rate)
+        setting = ' -epoch {} -thread {} -dim {} -lr {} -lrUpdateRate {} -ws {} -neg {}'.format(epoch, thread, dim, lr, update_rate, ws, neg)
         self.train_cmd_fmt += setting
 
         model_path = self.dir_path + '/model/' + model + '.bin'

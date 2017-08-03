@@ -38,14 +38,18 @@ if __name__ == '__main__':
         dim = int(sys.argv[3])
         lr = float(sys.argv[4])
         update_rate = int(sys.argv[5])
+        ws = int(sys.argv[6])
+        neg = int(sys.argv[7])
         ftc = FastTextChar(epoch=epoch,
                            thread=thread,
                            dim=dim,
                            lr=lr,
-                           update_rate=update_rate)
-    if sys.argv[6] == 'train' or sys.argv[6] == 'all':
+                           update_rate=update_rate,
+                           ws=ws,
+                           neg=neg)
+    if sys.argv[8] == 'train' or sys.argv[8] == 'all':
         ftc.train()
-    if sys.argv[6] == 'test' or sys.argv[6] == 'all':
+    if sys.argv[8] == 'test' or sys.argv[8] == 'all':
         ftc.test()
-    if sys.argv[6] == 'eval' or sys.argv[6] == 'all':
+    if sys.argv[8] == 'eval' or sys.argv[8] == 'all':
         ftc.eval()

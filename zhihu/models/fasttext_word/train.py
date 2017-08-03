@@ -5,7 +5,8 @@ import os, sys
 log = Tools.get_logger('fasttext word')
 
 class FastTextWord:
-    def __init__(self, epoch=100, thread=30, dim=128, lr=0.5, update_rate=100, topk=5):
+    def __init__(self, epoch=100, thread=30, dim=128, lr=0.5, update_rate=100, 
+            ws=5, neg=5, topk=5):
         self.topk = topk
         cur_path = os.path.dirname(os.path.realpath(__file__))
         if not os.path.exists(cur_path + '/model'):
@@ -13,7 +14,8 @@ class FastTextWord:
         if not os.path.exists(cur_path + '/data'):
             os.mkdir(cur_path + '/data')
         model = 'model_{}_{}_{:.2f}_{}'.format(epoch, dim, lr, update_rate)
-        self.obj = FastText(cur_path, 'word', epoch, thread, dim, lr, update_rate, model)
+        self.obj = FastText(cur_path, 'word', epoch, thread, dim, lr, 
+                update_rate, ws, neg, model)
 
     def train(self):
         log.info('begin train')
@@ -38,14 +40,18 @@ if __name__ == '__main__':
         dim = int(sys.argv[3])
         lr = float(sys.argv[4])
         update_rate = int(sys.argv[5])
+        ws = int(sys.argv[6])
+        neg = int(sys.argv[7])
         ftc = FastTextWord(epoch=epoch,
                            thread=thread,
                            dim=dim,
                            lr=lr,
-                           update_rate=update_rate)
-    if sys.argv[6] == 'train' or sys.argv[6] == 'all':
+                           update_rate=update_rate,
+                           ws=ws,
+                           neg=neg)
+    if sys.argv[8] == 'train' or sys.argv[8] == 'all':
         ftc.train()
-    if sys.argv[6] == 'test' or sys.argv[6] == 'all':
+    if sys.argv[8] == 'test' or sys.argv[8] == 'all':
         ftc.test()
-    if sys.argv[6] == 'eval' or sys.argv[6] == 'all':
+    if sys.argv[8] == 'eval' or sys.argv[8] == 'all':
         ftc.eval()
