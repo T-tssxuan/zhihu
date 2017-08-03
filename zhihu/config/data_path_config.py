@@ -21,6 +21,20 @@ class DataPathConfig:
     def get_topic_set_path():
         return Tools.get_data_directory() + 'topic_set.txt'
 
+    def get_word_idx_path():
+        return Tools.get_data_directory() + 'word_idx.txt'
+    def get_char_idx_path():
+        return Tools.get_data_directory() + 'char_idx.txt'
+    def get_question_train_word_idx_path():
+        return Tools.get_data_directory() + 'question_train_word_idx.txt'
+    def get_question_train_char_idx_path():
+        return Tools.get_data_directory() + 'question_train_char_idx.txt'
+
+    def get_question_train_word_set_path():
+        return Tools.get_data_directory() + 'question_train_word_set.txt'
+    def get_question_train_char_set_path():
+        return Tools.get_data_directory() + 'question_train_char_set.txt'
+
     def get_question_train_word_title_set_path():
         return Tools.get_data_directory() + 'question_train_word_title_set.csv'
     def get_question_train_word_desc_set_path():
@@ -56,6 +70,11 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'fasttext_test_char.txt'
     def get_fasttext_test_topic_path():
         return Tools.get_data_directory() + 'fasttext_test_topic.txt'
+
+    def get_ns_train_word_path():
+        return Tools.get_data_directory() + 'ns_train_word.txt'
+    def get_ns_train_char_path():
+        return Tools.get_data_directory() + 'ns_train_char.txt'
 
 class EvalPathConfig:
     def get_question_eval_word_title_set_path():
