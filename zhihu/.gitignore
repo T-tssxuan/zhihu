@@ -3,3 +3,4 @@ data/*
 tmp/
 backup/
 __pycache__/*
+tfboard*
