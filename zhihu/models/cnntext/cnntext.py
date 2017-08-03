@@ -46,7 +46,7 @@ class CNNText:
         log.info('logits: {}'.format(self.logits.shape))
 
         logits_mean = tf.reduce_mean(self.logits)
-        tf.summary.scalar("logits_mean", self.cost)
+        tf.summary.scalar("logits_mean", logits_mean)
 
         self.cost = tf.reduce_mean(
                 tf.nn.softmax_cross_entropy_with_logits(labels=self.y, 
