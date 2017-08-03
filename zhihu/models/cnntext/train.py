@@ -82,13 +82,14 @@ with tf.Session() as sess:
             summary_writer.add_summary(summary, i)
 
             mean = tf.reduce_mean(logits)
+            print(mean)
             avg = data_topic.sum() / data_topic.shape[0]
             # for l in logits:
             #     print(' '.join([str(e) for e in l]))
             # log.info('logits: {}'.format(logits))
             log.info('desc miss ratio: {:.4f}%'.format(dp_word_desc.miss_ratio))
             log.info('title miss ratio: {:.4f}%'.format(dp_word_title.miss_ratio))
-            log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}, mean: {:.4f}'.format(i, cost, dp_word_desc.offset, avg, mean))
+            log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, cost, dp_word_desc.offset, avg))
             _score = score.score(logits, data_topic_test)
             log.info('eval score: {}'.format(_score))
     summary_writer.close()
