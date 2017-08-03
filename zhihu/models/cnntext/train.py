@@ -13,7 +13,7 @@ learning_rate = 0.001
 batch_size = 128
 topic_num = 1999
 show_step = 10
-test_size = 10
+test_size = 1000
 
 log.info('begin init network')
 # feed desc word representation into the network
@@ -61,10 +61,15 @@ with tf.Session() as sess:
         data_word_title, _ = dp_word_title.next(batch_size, X_word_title_len)
         data_topic = dp_topic.next(batch_size, topic_num)
 
+        # feed_dict={
+        #            X_word_desc: data_word_desc,
+        #            X_word_title: data_word_title,
+        #            y: data_topic
+        #           }
         feed_dict={
-                   X_word_desc: data_word_desc,
-                   X_word_title: data_word_title,
-                   y: data_topic
+                   X_word_desc: data_word_desc_test,
+                   X_word_title: data_word_title_test,
+                   y: data_topic_test 
                   }
         sess.run(cnntext.optimizer, feed_dict=feed_dict)
         if i % show_step == 0:
