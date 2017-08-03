@@ -21,8 +21,8 @@ def _formate_idx_data(in_path, out_path, dd):
                 tmp = [dd[ele] for ele in line.rstrip().split(',')]
                 out.write(','.join(tmp) + '\n')
 
-def format_merge_data():
-    log.info('format_merge_data')
+def format_idx_data():
+    log.info('begin format_merge_data')
     word_idx = get_dict(DataPathConfig.get_word_idx_path())
     char_idx = get_dict(DataPathConfig.get_char_idx_path())
     _formate_merge_data(
@@ -33,7 +33,7 @@ def format_merge_data():
             DataPathConfig.get_question_train_char_set_path(),
             DataPathConfig.get_question_train_char_idx_path(),
             char_idx)
-    log.info('format_merge_data')
+    log.info('end format_merge_data')
 
 def add_element(data, out):
     for ele in data.rstrip().split(','):

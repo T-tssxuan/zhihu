@@ -14,12 +14,16 @@ class RawDataPathConfig:
 class DataPathConfig:
     def get_topic_desc_path():
         return Tools.get_data_directory() + 'topic_desc.tsv'
+    def get_topic_desc_idx_path():
+        return Tools.get_data_directory() + 'topic_desc_idx.csv'
     def get_children_of_topic_path():
         return Tools.get_data_directory() + 'children_of_topic.csv'
     def get_parents_of_topic_path():
         return Tools.get_data_directory() + 'parents_of_topic.csv'
     def get_topic_set_path():
         return Tools.get_data_directory() + 'topic_set.txt'
+    def get_topic_idx_path():
+        return Tools.get_data_directory() + 'topic_idx.txt'
 
     def get_word_idx_path():
         return Tools.get_data_directory() + 'word_idx.txt'

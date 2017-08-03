@@ -8,6 +8,19 @@ from ..utils.tools import Tools
 
 log = Tools.get_logger('preprocess')
 
+def idx_topic():
+    log.info('begin idx_topic')
+    with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+        dd = dict([(key, str(value)) for value, key in enumerate(f)])
+
+    with open(DataPathConfig.get_topic_idx_path(), 'w') as out:
+        with open(DataPathConfig.get_topic_desc_path(), 'r') as f:
+            for line in f:
+                tmp = [dd[ele] for ele in line.rstrip().split('\t')]
+                out.write(','.join(tmp) + '\n')
+    log.info('end idx_topic')
+
+
 def get_topic_relation():
     log.info('begin')
 
@@ -52,3 +65,4 @@ def get_topic_relation():
 if __name__ == '__main__':
     print(os.getcwd())
     get_topic_relation()
+    idx_topic()
