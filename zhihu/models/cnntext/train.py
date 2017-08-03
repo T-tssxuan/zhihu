@@ -76,7 +76,7 @@ with tf.Session() as sess:
             #     print(' '.join([str(e) for e in l]))
             # log.info('logits: {}'.format(logits))
             log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, cost, dp_word_desc.offset, avg))
-            _score = score.score(logits, data_topic)
+            _score = score.score(logits, data_topic_test)
             log.info('eval score: {}'.format(_score))
 
 log.info('finished train')

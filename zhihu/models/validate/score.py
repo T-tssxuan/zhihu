@@ -2,7 +2,7 @@ import numpy as np
 import math
 
 class Score:
-    def __init__(self, topk=3):
+    def __init__(self, topk=5):
         self.topk = topk
 
     def _eval(self, predict_label_and_marked_label_list):
@@ -49,6 +49,7 @@ class Score:
         src = [list(np.where(ele > 0)[0]) for ele in src]
         print(pre)
         print(src)
+        print([set(a).intersection(set(b)) for a, b in zip(pre, src)]
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 

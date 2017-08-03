@@ -38,10 +38,10 @@ class CNNText:
         h_cnn = tf.reshape(cnn_output, shape=[-1, len(self.kernel_lens) * self.num_outputs])
         log.info('h_cnn: {}'.format(h_cnn.shape))
 
-        h_cnn_dropout = tf.layers.dropout(h_cnn, 0.5)
+        # h_cnn_dropout = tf.layers.dropout(h_cnn, 0.5)
 
         self.logits = tf.contrib.layers.fully_connected(
-                inputs=h_cnn_dropout,
+                inputs=h_cnn,
                 num_outputs=self.class_num)
         log.info('logits: {}'.format(self.logits.shape))
 
