@@ -11,6 +11,9 @@ class DataProvider:
         self.data_file_path = data_file_path
         self.end_pos = int(total * 0.7)
         self.is_need_length = is_need_length
+        self._miss_count = 0.
+        self._total_count = 0.
+        self.miss_ratio = 0.
 
         self.embeding = None
         if embedding_path != '':
@@ -33,10 +36,12 @@ class DataProvider:
             row = []
             if self.embeding:
                 for it in items:
+                    self._total_count += 1
                     if it in self.embeding:
                         row.append(self.embeding[it])
                     else:
                         row.append(self.padding_wv)
+                        self._miss_count += 1
 
             # if need to padding to the same length
             if self.is_need_length and fixed_length > 0:
@@ -50,6 +55,7 @@ class DataProvider:
             else:
                 data.append(items)
 
+        self.miss_ratio = self._miss_count / max(1., self._total_count) * 100
         return data, length
 
     def next(self, batch_size, fixed_length=0):

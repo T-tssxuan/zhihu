@@ -61,16 +61,16 @@ with tf.Session() as sess:
         data_word_title, _ = dp_word_title.next(batch_size, X_word_title_len)
         data_topic = dp_topic.next(batch_size, topic_num)
 
-        # feed_dict={
-        #            X_word_desc: data_word_desc,
-        #            X_word_title: data_word_title,
-        #            y: data_topic
-        #           }
         feed_dict={
-                   X_word_desc: data_word_desc_test,
-                   X_word_title: data_word_title_test,
-                   y: data_topic_test 
+                   X_word_desc: data_word_desc,
+                   X_word_title: data_word_title,
+                   y: data_topic
                   }
+        # feed_dict={
+        #            X_word_desc: data_word_desc_test,
+        #            X_word_title: data_word_title_test,
+        #            y: data_topic_test 
+        #           }
         sess.run(cnntext.optimizer, feed_dict=feed_dict)
         if i % show_step == 0:
             feed_dict={
@@ -86,6 +86,8 @@ with tf.Session() as sess:
             # for l in logits:
             #     print(' '.join([str(e) for e in l]))
             # log.info('logits: {}'.format(logits))
+            log.info('desc miss ratio: {:.4f}%'.format(dp_word_desc.miss_ratio))
+            log.info('title miss ratio: {:.4f}%'.format(dp_word_title.miss_ratio))
             log.info('step: {}, cost: {:.6f}, offset: {}, avg: {:.4f}, mean: {:.4f}'.format(i, cost, dp_word_desc.offset, avg, mean))
             _score = score.score(logits, data_topic_test)
             log.info('eval score: {}'.format(_score))
