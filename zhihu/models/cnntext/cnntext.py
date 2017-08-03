@@ -38,10 +38,10 @@ class CNNText:
         self.h_cnn = tf.reshape(cnn_output, shape=[-1, len(self.kernel_lens) * self.num_outputs])
         log.info('h_cnn: {}'.format(self.h_cnn.shape))
 
-        # h_cnn_dropout = tf.layers.dropout(h_cnn, 0.5)
+        self.h_cnn_dropout = tf.layers.dropout(self.h_cnn, 0.5)
 
         self.logits = tf.contrib.layers.fully_connected(
-                inputs=self.h_cnn,
+                inputs=self.h_cnn_dropout,
                 num_outputs=self.class_num)
         log.info('logits: {}'.format(self.logits.shape))
 
@@ -55,16 +55,13 @@ class CNNText:
         self.summary_op = tf.summary.merge_all()
     
     def _get_conv_layer(self, kernel_len):
-        with tf.variable_scope('kernel_{}'.format(kernel_len)):
+        with tf.variable_scope('kernel_{}'.format(kernel_len)) as s:
             log.info('kernel_{}'.format(kernel_len))
-            regularizer = tf.contrib.layers.l2_regularizer(scale=self.regularizer_scale)
             cnn = tf.contrib.layers.conv2d(
                     inputs=self.X, 
                     num_outputs=self.num_outputs, 
                     kernel_size=[kernel_len, self.embedding_size], 
                     stride=1,
-                    weights_regularizer=regularizer,
-                    # biases_regularizer=regularizer,
                     padding='VALID')
             shape = cnn.shape
             log.info('shape: {}'.format(shape))
