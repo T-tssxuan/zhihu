@@ -25,11 +25,11 @@ def format_idx_data():
     log.info('begin format_merge_data')
     word_idx = get_dict(DataPathConfig.get_word_idx_path())
     char_idx = get_dict(DataPathConfig.get_char_idx_path())
-    _formate_merge_data(
+    _formate_idx_data(
             DataPathConfig.get_question_train_word_set_path(),
             DataPathConfig.get_question_train_word_idx_path(),
             word_idx)
-    _formate_merge_data(
+    _formate_idx_data(
             DataPathConfig.get_question_train_char_set_path(),
             DataPathConfig.get_question_train_char_idx_path(),
             char_idx)
@@ -76,10 +76,10 @@ def format_question_data():
             missed_match_count += 1
             continue
 
-        add_element(qt_items[1], word_set)
-        add_element(qt_items[2], word_set)
-        add_element(qt_items[3], char_set)
-        add_element(qt_items[4], char_set)
+        add_element(q_items[1], word_set)
+        add_element(q_items[2], word_set)
+        add_element(q_items[3], char_set)
+        add_element(q_items[4], char_set)
 
         q_w_set_out.write(q_items[1] + ',' + q_items[2] + '\n')
         q_c_set_out.write(q_items[3] + ',' + q_items[4] + '\n')
