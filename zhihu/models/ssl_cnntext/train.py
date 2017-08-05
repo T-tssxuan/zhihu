@@ -42,6 +42,8 @@ cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate,
 log.info('load topic')
 path = DataPathConfig.get_question_topic_train_set_path()
 dp_topic = NagtiveSamplingTopicProvider(path=path, num_true=num_true)
+data_topic_test = dp_topic.test(test_size, topic_num)
+log.info('data_topic_test: {}'.format(data_topic_test.shape))
 
 log.info('begin load word provider')
 dp_word = DataProvider(DataPathConfig.get_question_train_word_set_path(),
@@ -52,8 +54,8 @@ log.info('data_word_test: {}'.format(len(data_word_test)))
 
 log.info('load topic eval')
 dp_topic_eval = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
-data_topic_test = dp_topic_eval.test(test_size, topic_num)
-log.info('data_topic_test: {}'.format(data_topic_test.shape))
+data_topic_test_eval = dp_topic_eval.test(test_size, topic_num)
+log.info('data_topic_test_eval: {}'.format(data_topic_test_eval.shape))
 
 
 score = Score()
@@ -79,17 +81,17 @@ with tf.Session() as sess:
         if i % show_step == 0:
             feed_dict={
                        X_word: data_word_test,
-                       y: np.zeros((test_size, num_true))
+                       y: data_topic_test
                       }
-            logits, summary = sess.run([cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
+            logits, eval_cost, summary = sess.run([cnntext.logits, cnntext.eval_cost, cnntext.summary_op], feed_dict=feed_dict)
             summary_writer.add_summary(summary, i)
 
             avg = data_topic_test.sum() / data_topic_test.shape[0]
 
             log.info('desc miss ratio: {:.4f}%'.format(dp_word.miss_ratio))
-            # log.info('step: {}, eval_cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, eval_cost, dp_word.offset, avg))
-            log.info('step: {}, offset: {}, avg: {:.4f}'.format(i, dp_word.offset, avg))
-            _score = score.score(logits, data_topic_test)
+            log.info('step: {}, eval_cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, eval_cost, dp_word.offset, avg))
+            # log.info('step: {}, offset: {}, avg: {:.4f}'.format(i, dp_word.offset, avg))
+            _score = score.score(logits, data_topic_test_eval)
             log.info('eval score: {}'.format(_score))
     summary_writer.close()
 

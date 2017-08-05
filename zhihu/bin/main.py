@@ -63,7 +63,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'nstp' or sys.argv[1] == 'all':
         print('NagtiveSamplingTopicProvider')
         path = DataPathConfig.get_question_topic_train_set_path()
-        nstp = NagtiveSamplingTopicProvider(path, num_true=3)
-        for i in range(3):
-            data = nstp.next(5)
+        nstp = NagtiveSamplingTopicProvider(path, num_true=5)
+        for i in range(10):
+            data = nstp.next(10)
             print(data)
