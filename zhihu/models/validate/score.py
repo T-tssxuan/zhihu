@@ -1,5 +1,8 @@
 import numpy as np
 import math
+from ...utils.tools import Tools
+
+log = Tools.get_logger('score')
 
 class Score:
     def __init__(self, topk=5):
@@ -54,11 +57,11 @@ class Score:
         src = [list(np.where(ele > 0)[0]) for ele in src]
         # print(pre)
         # print(src)
+        inter = [list(set(a).intersection(set(b))) for a, b in zip(pre, src)]
+        total = sum([len(ele) for ele in inter])
+        log.info('total: {}'.format(total))
         if self.show_count % 10 == 0:
-            inter = [list(set(a).intersection(set(b))) for a, b in zip(pre, src)]
-            total = sum([len(ele) for ele in inter])
-            print(inter)
-            print('total: {}'.format(total))
+            log.info(inter)
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 

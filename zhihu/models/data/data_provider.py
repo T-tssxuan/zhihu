@@ -129,6 +129,12 @@ class NagtiveSamplingTopicProvider(DataProvider):
                 col += 1
                 if col >= self.num_true:
                     break
+            if col < self.num_true:
+                tmp = col
+                while col < self.num_true:
+                    vecs[idx, col] = vecs[idx, np.random.randint(0, self.num_true)]
+                    col += 1
+
         return vecs
 
     def next(self, batch_size, fixed_length=0):
