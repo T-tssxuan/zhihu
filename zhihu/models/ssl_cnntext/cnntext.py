@@ -42,29 +42,39 @@ class CNNText:
 
         self.h_cnn_dropout = tf.layers.dropout(self.h_cnn, 0.5)
 
-        softmax_w = tf.Variable(tf.truncated_normal((class_num, self.h_cnn_dropout.shape[1])), name='softmax_weight') # create softmax weight matrix here
-        softmax_b = tf.Variable(tf.zeros(class_num, name="softmax_bias")) # create softmax biases here
-	if mode == "train":
-	    loss = tf.nn.sampled_softmax_loss(
-		    weights=softmax_w,
-		    biases=softmax_b,
-		    labels=y,
-		    inputs=self.h_cnn_dropout,
-		    num_sampled=n_sampled,
-		    num_classes=class_num,
-                    name='train_loss')
-            tf.summary.scalar("train_loss", self.cost)
-            self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
-	elif mode == "eval":
-            logits = tf.matmul(self.h_cnn_dropout, tf.transpose(softmax_w))
-            self.logits = tf.nn.bias_add(logits, biases)
-            log.info('logits: {}'.format(self.logits.shape))
-            logits_mean = tf.reduce_mean(self.logits)
-            tf.summary.scalar("logits_mean", logits_mean)
+        softmax_w = tf.Variable(tf.truncated_normal((class_num, self.h_cnn_dropout.shape[1].value)), name='softmax_weight')
+        softmax_b = tf.Variable(tf.zeros(class_num), name="softmax_bias") 
+        log.info('softmax_w: {}'.format(softmax_w.shape))
+        log.info('softmax_b: {}'.format(softmax_b.shape))
 
-            self.labels_one_hot = tf.one_hot(y, class_num)
-            self.loss = tf.nn.softmax_cross_entropy_with_logits(labels=labels_one_hot, logits=self.logits)
+        # the train graph
+        log.info('init the softmax sampling sub-graph')
+        self.train_cost = tf.reduce_mean(tf.nn.sampled_softmax_loss(
+                weights=softmax_w,
+                biases=softmax_b,
+                labels=y,
+                inputs=self.h_cnn_dropout,
+                num_sampled=num_sampled,
+                num_classes=class_num,
+                name='train_loss'))
+        log.info('train_cost: {}'.format(self.train_cost))
+        tf.summary.scalar("train_cost", self.train_cost)
+        self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.train_cost)
+        log.info('finihsed init softmax sampling sub-graph')
 
+        # the eval sub-graph
+        log.info('init the eval sub-graph')
+        logits = tf.matmul(self.h_cnn_dropout, tf.transpose(softmax_w))
+        self.logits = tf.nn.bias_add(logits, softmax_b)
+        log.info('logits: {}'.format(self.logits.shape))
+        logits_mean = tf.reduce_mean(self.logits)
+        tf.summary.scalar("logits_mean", logits_mean)
+
+        labels_one_hot = tf.one_hot(y, class_num)
+        self.eval_cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels_one_hot, logits=self.logits))
+        log.info('eval_cost: {}'.format(self.eval_cost))
+        tf.summary.scalar("eval_cost", self.eval_cost)
+        log.info('finished init ssl cnntext')
 
         self.summary_op = tf.summary.merge_all()
     

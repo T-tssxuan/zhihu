@@ -1,6 +1,6 @@
 from ..preprocess.get_topic_relation import get_topic_relation
 from ..preprocess.question_format import format_question_data
-from ..models.data.data_provider import TopicProvider, DataProvider, BinaryTopicProvider, PropagatedTopicProvider, TfidfDataProvider
+from ..models.data.data_provider import TopicProvider, DataProvider, BinaryTopicProvider, PropagatedTopicProvider, TfidfDataProvider, NagtiveSamplingTopicProvider
 from ..config.data_path_config import RawDataPathConfig, DataPathConfig
 import os
 import sys
@@ -60,3 +60,9 @@ if __name__ == '__main__':
             print(len(data[0]), len(data[1]))
             print(sum(data[0]), sum(data[1]))
             # print(data)
+    if sys.argv[1] == 'nstp' or sys.argv[1] == 'all':
+        print('NagtiveSamplingTopicProvider')
+        nstp = NagtiveSamplingTopicProvider()
+        for i in range(3):
+            data = nstp.next(5)
+            print(data)

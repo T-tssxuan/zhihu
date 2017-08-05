@@ -110,7 +110,7 @@ def format_question_data():
         q_w_set_out.write(q_items[2] + ',' + q_items[4] + '\n')
         q_c_set_out.write(q_items[1] + ',' + q_items[3] + '\n')
 
-        for topic in qt_items[0].split(','):
+        for topic in qt_items[1].split(','):
             qt_topic_split_out.write(topic + '\n')
             q_w_set_topic_split_out.write(q_items[2] + ',' + q_items[4] + '\n')
             q_c_set_topic_split_out.write(q_items[1] + ',' + q_items[3] + '\n')

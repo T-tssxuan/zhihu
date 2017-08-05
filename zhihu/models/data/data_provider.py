@@ -93,7 +93,7 @@ class TopicProvider(DataProvider):
 
     def _one_hot(self, sentences, fixed_length=0):
         length = max(self.num, fixed_length)
-        vecs = np.zeros((len(sentences), length))
+        vecs = np.zeros((len(sentences), length), dtype='i')
         for idx in range(len(sentences)):
             for topic in sentences[idx]:
                 vecs[idx][self.topic_dict[topic]] = 1.;
@@ -108,6 +108,33 @@ class TopicProvider(DataProvider):
                 size=size, 
                 fixed_length=fixed_length)
         return self._one_hot(sentences, fixed_length)
+
+class NagtiveSamplingTopicProvider(DataProvider):
+    def __init__(self):
+        path = DataPathConfig.get_question_topic_train_topic_split_set_path()
+        super(NagtiveSamplingTopicProvider, self).__init__(path, '', False)
+        self.topic_dict = dict() 
+        with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+            for idx, line in enumerate(f):
+                self.topic_dict[line.rstrip()] = idx
+        self.num = len(self.topic_dict.keys())
+
+    def _to_idx(self, sentences, fixed_length=0):
+        length = 1
+        vecs = np.zeros((len(sentences), length), dtype='i')
+        for idx in range(len(sentences)):
+            vecs[idx, 0] = self.topic_dict[sentences[idx][0]]
+        return vecs
+
+    def next(self, batch_size, fixed_length=0):
+        sentences, _ = super(NagtiveSamplingTopicProvider, self).next(batch_size)
+        return self._to_idx(sentences, fixed_length)
+    
+    def test(self, size=0, fixed_length=0):
+        sentences, _ = super(NagtiveSamplingTopicProvider, self).test(
+                size=size, 
+                fixed_length=fixed_length)
+        return self._to_idx(sentences, fixed_length)
 
 class PropagatedTopicProvider(DataProvider):
     def __init__(self):
