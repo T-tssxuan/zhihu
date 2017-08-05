@@ -4,6 +4,7 @@ import math
 class Score:
     def __init__(self, topk=5):
         self.topk = topk
+        self.show_count = 0
 
     def _eval(self, predict_label_and_marked_label_list):
         """
@@ -43,13 +44,15 @@ class Score:
         return self._eval(merged)
 
     def score(self, pre, src):
+        self.show_count += 1
         pre = np.array(pre)
         pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
         src = np.array(src)
         src = [list(np.where(ele > 0)[0]) for ele in src]
         # print(pre)
         # print(src)
-        # print([list(set(a).intersection(set(b))) for a, b in zip(pre, src)])
+        if self.show_count % 10 == 0:
+            print([list(set(a).intersection(set(b))) for a, b in zip(pre, src)])
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 

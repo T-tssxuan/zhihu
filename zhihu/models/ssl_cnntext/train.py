@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from ..data.data_provider import DataProvider, NagtiveSamplingTopicProvider
+from ..data.data_provider import DataProvider, NagtiveSamplingTopicProvider, TopicProvider
 from ...config.data_path_config import DataPathConfig
 from ...utils.tools import Tools
 from ..validate.score import Score
@@ -10,10 +10,11 @@ summary_path = Tools.get_tf_summary_path()
 
 log = Tools.get_logger('cnn text')
 learning_rate = 0.01
-batch_size = 128
+batch_size = 256
 topic_num = 1999
-show_step = 10
+show_step = 50
 test_size = 1000
+num_sampled = 10
 
 log.info('begin init network')
 # feed desc word representation into the network
@@ -25,20 +26,29 @@ X = X_word
 
 y = tf.placeholder(tf.int32, [None, 1])
 
-cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate)
+cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate,
+        num_sampled=num_sampled, )
 
 # init the data providers
 log.info('load topic')
 dp_topic = NagtiveSamplingTopicProvider()
-data_topic_test = dp_topic.test(test_size, topic_num)
-log.info('data_topic_test: {}'.format(data_topic_test.shape))
 
-log.info('begin word desc data provider')
+log.info('begin word data provider')
 dp_word = DataProvider(DataPathConfig.get_question_train_word_topic_split_set_path(),
                             DataPathConfig.get_word_embedding_path())
-log.info('begin word desc test data')
-data_word_test, _ = dp_word.test(test_size, X_word_len)
+
+log.info('begin load word eval provider')
+dp_word_eval = DataProvider(DataPathConfig.get_question_train_word_set_path(),
+                            DataPathConfig.get_word_embedding_path())
+log.info('begin word test data')
+data_word_test, _ = dp_word_eval.test(test_size, X_word_len)
 log.info('data_word_test: {}'.format(len(data_word_test)))
+
+log.info('load topic eval')
+dp_topic_eval = TopicProvider(DataPathConfig.get_question_topic_train_set_path())
+data_topic_test = dp_topic_eval.test(test_size, topic_num)
+log.info('data_topic_test: {}'.format(data_topic_test.shape))
+
 
 score = Score()
 log.info('begin train')
@@ -58,19 +68,21 @@ with tf.Session() as sess:
         #            X_word: data_word_test,
         #            y: data_topic_test 
         #           }
-        sess.run(cnntext.optimizer, feed_dict=feed_dict)
+        _, summary = sess.run([cnntext.optimizer, cnntext.summary_op], feed_dict=feed_dict)
+        summary_writer.add_summary(summary, i)
         if i % show_step == 0:
             feed_dict={
                        X_word: data_word_test,
-                       y: data_topic_test 
+                       y: np.zeros((test_size, 1))
                       }
-            eval_cost, logits, summary = sess.run([cnntext.eval_cost, cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
+            logits, summary = sess.run([cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
             summary_writer.add_summary(summary, i)
 
-            avg = data_topic.sum() / data_topic.shape[0]
+            avg = data_topic_test.sum() / data_topic_test.shape[0]
 
             log.info('desc miss ratio: {:.4f}%'.format(dp_word.miss_ratio))
-            log.info('step: {}, eval_cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, eval_cost, dp_word.offset, avg))
+            # log.info('step: {}, eval_cost: {:.6f}, offset: {}, avg: {:.4f}'.format(i, eval_cost, dp_word.offset, avg))
+            log.info('step: {}, offset: {}, avg: {:.4f}'.format(i, dp_word.offset, avg))
             _score = score.score(logits, data_topic_test)
             log.info('eval score: {}'.format(_score))
     summary_writer.close()

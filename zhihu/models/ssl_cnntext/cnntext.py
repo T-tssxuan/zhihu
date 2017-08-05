@@ -12,8 +12,7 @@ class CNNText:
             embedding_size=256,
             learning_rate=0.01,
             regularizer_scale=0.1,
-            num_sampled=5,
-            mode='train'):
+            num_sampled=5):
         self.X = tf.expand_dims(X, -1)
         self.y = y
         self.class_num = class_num
@@ -30,6 +29,7 @@ class CNNText:
         log.info('num_outputs: {}'.format(self.num_outputs))
         log.info('learning_rate: {}'.format(self.learning_rate))
         log.info('regularizer_scale: {}'.format(regularizer_scale))
+        log.info('num_sampled: {}'.format(num_sampled))
 
         pools = []
         for k in self.kernel_lens:
