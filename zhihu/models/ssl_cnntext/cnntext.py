@@ -6,14 +6,15 @@ log = Tools.get_logger('CNNText')
 
 class CNNText:
     def __init__(self, X, y, 
-            class_num=1999, 
+            class_num=2000, 
             kernel_lens=[3, 4, 5, 6], 
             num_outputs=512, 
             embedding_size=256,
             learning_rate=0.01,
             regularizer_scale=0.1,
             num_sampled=5,
-            num_true=3):
+            num_true=3,
+            l2_reg_lambda=0.01):
         self.X = tf.expand_dims(X, -1)
         self.y = y
         self.class_num = class_num
@@ -22,6 +23,7 @@ class CNNText:
         self.num_outputs = num_outputs
         self.learning_rate = learning_rate
         self.regularizer_scale = regularizer_scale
+        self.l2_reg_lambda = l2_reg_lambda
 
         log.info('X: {}'.format(self.X.shape))
         log.info('y: {}'.format(self.y.shape))
@@ -29,8 +31,11 @@ class CNNText:
         log.info('kernel_lens: {}'.format(self.kernel_lens))
         log.info('num_outputs: {}'.format(self.num_outputs))
         log.info('learning_rate: {}'.format(self.learning_rate))
-        log.info('regularizer_scale: {}'.format(regularizer_scale))
+        log.info('regularizer_scale: {}'.format(self.regularizer_scale))
         log.info('num_sampled: {}'.format(num_sampled))
+        log.info('l2_reg_lambda: {}'.format(self.l2_reg_lambda))
+
+        self.l2_loss = tf.constant(0.0)
 
         pools = []
         for k in self.kernel_lens:
@@ -43,6 +48,7 @@ class CNNText:
 
         self.h_cnn_dropout = tf.layers.dropout(self.h_cnn, 0.5)
 
+
         softmax_w = tf.Variable(tf.truncated_normal((class_num, self.h_cnn_dropout.shape[1].value)), name='softmax_weight')
         softmax_b = tf.Variable(tf.zeros(class_num), name="softmax_bias") 
         log.info('softmax_w: {}'.format(softmax_w.shape))
@@ -50,7 +56,7 @@ class CNNText:
 
         # the train graph
         log.info('init the softmax sampling sub-graph')
-        self.train_cost = tf.reduce_mean(tf.nn.sampled_softmax_loss(
+        self.ns_train_cost = tf.reduce_mean(tf.nn.sampled_softmax_loss(
                 weights=softmax_w,
                 biases=softmax_b,
                 labels=y,
@@ -58,7 +64,7 @@ class CNNText:
                 num_sampled=num_sampled,
                 num_classes=class_num,
                 num_true=num_true,
-                name='train_loss'))
+                name='ns_train_loss'))
         # self.train_cost = tf.reduce_mean(tf.nn.sampled_softmax_loss(
         #         weights=softmax_w,
         #         biases=softmax_b,
@@ -68,8 +74,16 @@ class CNNText:
         #         num_classes=class_num,
         #         num_true=1,
         #         name='train_loss'))
-        log.info('train_cost: {}'.format(self.train_cost))
+        log.info('ns_train_cost: {}'.format(self.ns_train_cost))
+        tf.summary.scalar("ns_train_cost", self.ns_train_cost)
+
+        self.l2_loss += tf.nn.l2_loss(softmax_w)
+        self.l2_loss += tf.nn.l2_loss(softmax_b)
+        tf.summary.scalar("l2_loss", self.l2_loss)
+
+        self.train_cost = self.ns_train_cost + self.l2_reg_lambda * self.l2_loss
         tf.summary.scalar("train_cost", self.train_cost)
+
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.train_cost)
         log.info('finihsed init softmax sampling sub-graph')
 

@@ -14,12 +14,13 @@ batch_size = 256
 topic_num = 2000
 show_step = 50
 test_size = 1000
-num_sampled = 10
-num_true = 3
+num_sampled = 5
+num_true = 4
+l2_reg_lambda = 0.0001
 
 log.info('begin init network')
 # feed desc word representation into the network
-X_word_len = 50
+X_word_len = 60
 X_word = tf.placeholder(tf.float32, [None, X_word_len, 256], name='X_word')
 
 # concat the input
@@ -28,7 +29,7 @@ X = X_word
 y = tf.placeholder(tf.int32, [None, num_true])
 
 cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate,
-        num_sampled=num_sampled, num_true=num_true)
+        num_sampled=num_sampled, num_true=num_true, l2_reg_lambda=l2_reg_lambda)
 
 # init the data providers
 # log.info('load topic')
