@@ -126,9 +126,8 @@ class NagtiveSamplingTopicProvider(DataProvider):
             col = 0
             for ele in sentences[idx]:
                 vecs[idx, col] = self.topic_dict[ele]
-                if col < num_true:
-                    col += 1
-                else:
+                col += 1
+                if col >= self.num_true:
                     break
         return vecs
 
