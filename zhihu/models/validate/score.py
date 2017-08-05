@@ -47,6 +47,9 @@ class Score:
         self.show_count += 1
         pre = np.array(pre)
         pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
+
+        pre = [[ele if ele != 0 else -1 for ele in row] for row in pre]
+
         src = np.array(src)
         src = [list(np.where(ele > 0)[0]) for ele in src]
         # print(pre)
