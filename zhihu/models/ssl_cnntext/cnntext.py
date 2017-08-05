@@ -12,7 +12,8 @@ class CNNText:
             embedding_size=256,
             learning_rate=0.01,
             regularizer_scale=0.1,
-            num_sampled=5):
+            num_sampled=5,
+            num_true=3):
         self.X = tf.expand_dims(X, -1)
         self.y = y
         self.class_num = class_num
@@ -56,7 +57,17 @@ class CNNText:
                 inputs=self.h_cnn_dropout,
                 num_sampled=num_sampled,
                 num_classes=class_num,
+                num_true=num_true,
                 name='train_loss'))
+        # self.train_cost = tf.reduce_mean(tf.nn.sampled_softmax_loss(
+        #         weights=softmax_w,
+        #         biases=softmax_b,
+        #         labels=y,
+        #         inputs=self.h_cnn_dropout,
+        #         num_sampled=num_sampled,
+        #         num_classes=class_num,
+        #         num_true=1,
+        #         name='train_loss'))
         log.info('train_cost: {}'.format(self.train_cost))
         tf.summary.scalar("train_cost", self.train_cost)
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.train_cost)
@@ -70,7 +81,10 @@ class CNNText:
         logits_mean = tf.reduce_mean(self.logits)
         tf.summary.scalar("logits_mean", logits_mean)
 
-        labels_one_hot = tf.one_hot(y, class_num)
+        labels_one_hot = tf.reduce_sum(tf.one_hot(y, class_num), axis=1)
+        # labels_one_hot = tf.one_hot(y, class_num)
+        log.info('labels_one_hot: {}'.format(labels_one_hot.shape))
+
         self.eval_cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels_one_hot, logits=self.logits))
         log.info('eval_cost: {}'.format(self.eval_cost))
         tf.summary.scalar("eval_cost", self.eval_cost)

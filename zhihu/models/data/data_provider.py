@@ -80,6 +80,7 @@ class DataProvider:
         if size == 0:
             size = total - self.end_pos
         data, length = self._get_data(f, size, fixed_length)
+        f.close()
         return data, length
 
 class TopicProvider(DataProvider):
@@ -110,8 +111,8 @@ class TopicProvider(DataProvider):
         return self._one_hot(sentences, fixed_length)
 
 class NagtiveSamplingTopicProvider(DataProvider):
-    def __init__(self):
-        path = DataPathConfig.get_question_topic_train_topic_split_set_path()
+    def __init__(self, path, num_true=3):
+        self.num_true = num_true
         super(NagtiveSamplingTopicProvider, self).__init__(path, '', False)
         self.topic_dict = dict() 
         with open(DataPathConfig.get_topic_set_path(), 'r') as f:
@@ -120,10 +121,15 @@ class NagtiveSamplingTopicProvider(DataProvider):
         self.num = len(self.topic_dict.keys())
 
     def _to_idx(self, sentences, fixed_length=0):
-        length = 1
-        vecs = np.zeros((len(sentences), length), dtype='i')
+        vecs = np.zeros((len(sentences), self.num_true), dtype='i')
         for idx in range(len(sentences)):
-            vecs[idx, 0] = self.topic_dict[sentences[idx][0]]
+            col = 0
+            for ele in sentences[idx]:
+                vecs[idx, col] = self.topic_dict[ele]
+                if col < num_true:
+                    col += 1
+                else:
+                    break
         return vecs
 
     def next(self, batch_size, fixed_length=0):

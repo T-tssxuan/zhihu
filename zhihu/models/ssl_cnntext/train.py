@@ -11,10 +11,11 @@ summary_path = Tools.get_tf_summary_path()
 log = Tools.get_logger('cnn text')
 learning_rate = 0.01
 batch_size = 256
-topic_num = 1999
+topic_num = 2000
 show_step = 50
 test_size = 1000
 num_sampled = 10
+num_true = 3
 
 log.info('begin init network')
 # feed desc word representation into the network
@@ -24,24 +25,29 @@ X_word = tf.placeholder(tf.float32, [None, X_word_len, 256], name='X_word')
 # concat the input
 X = X_word
 
-y = tf.placeholder(tf.int32, [None, 1])
+y = tf.placeholder(tf.int32, [None, num_true])
 
 cnntext = CNNText(X, y, topic_num, learning_rate=learning_rate,
-        num_sampled=num_sampled, )
+        num_sampled=num_sampled, num_true=num_true)
 
 # init the data providers
+# log.info('load topic')
+# path = DataPathConfig.get_question_topic_train_topic_split_set_path()
+# dp_topic = NagtiveSamplingTopicProvider(path=path, num_true=1)
+#
+# log.info('begin word data provider')
+# dp_word = DataProvider(DataPathConfig.get_question_train_word_topic_split_set_path(),
+#                             DataPathConfig.get_word_embedding_path())
+
 log.info('load topic')
-dp_topic = NagtiveSamplingTopicProvider()
+path = DataPathConfig.get_question_topic_train_set_path()
+dp_topic = NagtiveSamplingTopicProvider(path=path, num_true=num_true)
 
-log.info('begin word data provider')
-dp_word = DataProvider(DataPathConfig.get_question_train_word_topic_split_set_path(),
-                            DataPathConfig.get_word_embedding_path())
-
-log.info('begin load word eval provider')
-dp_word_eval = DataProvider(DataPathConfig.get_question_train_word_set_path(),
+log.info('begin load word provider')
+dp_word = DataProvider(DataPathConfig.get_question_train_word_set_path(),
                             DataPathConfig.get_word_embedding_path())
 log.info('begin word test data')
-data_word_test, _ = dp_word_eval.test(test_size, X_word_len)
+data_word_test, _ = dp_word.test(test_size, X_word_len)
 log.info('data_word_test: {}'.format(len(data_word_test)))
 
 log.info('load topic eval')
@@ -73,7 +79,7 @@ with tf.Session() as sess:
         if i % show_step == 0:
             feed_dict={
                        X_word: data_word_test,
-                       y: np.zeros((test_size, 1))
+                       y: np.zeros((test_size, num_true))
                       }
             logits, summary = sess.run([cnntext.logits, cnntext.summary_op], feed_dict=feed_dict)
             summary_writer.add_summary(summary, i)
