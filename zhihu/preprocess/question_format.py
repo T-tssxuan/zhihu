@@ -9,17 +9,33 @@ from ..utils.tools import Tools
 
 log = Tools.get_logger('question_format')
 
+def format_topic_idx():
+    log.info('begin idx_topic')
+    with open(DataPathConfig.get_topic_set_path(), 'r') as f:
+        dd = dict([(key.rstrip(), str(value)) for value, key in enumerate(f)])
+
+    with open(DataPathConfig.get_topic_idx_path(), 'w') as out:
+        with open(DataPathConfig.get_question_topic_train_set_path(), 'r') as f:
+            for num, line in enumerate(f):
+                tmp = [dd[ele] for ele in line.rstrip().split(',')]
+                out.write(','.join(tmp) + '\n')
+                if num % 300000 == 0:
+                    log.info('finished: {}'.format(num))
+    log.info('end idx_topic')
+
 def get_dict(path):
     with open(path, 'r') as f:
-        dd = dict([(key, str(value)) for value, key in enumerate(f)])
+        dd = dict([(key.rstrip(), str(value)) for value, key in enumerate(f)])
         return dd
 
 def _formate_idx_data(in_path, out_path, dd):
     with open(out_path, 'w') as out:
         with open(in_path, 'r') as f:
-            for line in f:
+            for num, line in enumerate(f):
                 tmp = [dd[ele] for ele in line.rstrip().split(',')]
                 out.write(','.join(tmp) + '\n')
+                if num % 100000 == 0:
+                    log.info('finished: {}'.format(num))
 
 def format_idx_data():
     log.info('begin format_merge_data')
@@ -36,7 +52,7 @@ def format_idx_data():
     log.info('end format_merge_data')
 
 def add_element(data, out):
-    for ele in data.rstrip().split(','):
+    for ele in data.rstrip('\n').split(','):
         out.add(ele)
 
 def format_question_data():
@@ -76,13 +92,15 @@ def format_question_data():
             missed_match_count += 1
             continue
 
-        add_element(q_items[1], word_set)
         add_element(q_items[2], word_set)
+        add_element(q_items[4], word_set)
+        add_element(q_items[1], char_set)
         add_element(q_items[3], char_set)
-        add_element(q_items[4], char_set)
 
-        q_w_set_out.write(q_items[1] + ',' + q_items[2] + '\n')
-        q_c_set_out.write(q_items[3] + ',' + q_items[4] + '\n')
+        if q_items[1] == '':
+            print(q_items[0])
+        q_w_set_out.write(q_items[2] + ',' + q_items[4] + '\n')
+        q_c_set_out.write(q_items[1] + ',' + q_items[3] + '\n')
 
         q_c_title_out.write(q_items[1] + '\n')
         q_c_desc_out.write(q_items[3] + '\n')
@@ -95,7 +113,7 @@ def format_question_data():
     qt_in.close()
 
     q_w_set_out.close()
-    q_w_set_out.close()
+    q_c_set_out.close()
     q_w_title_out.close()
     q_w_desc_out.close()
     q_c_title_out.close()
@@ -113,5 +131,6 @@ def format_question_data():
     log.info('finished all {} in {:.2f}s, missed: {}'.format(num, time() - t0, missed_match_count))
 
 if __name__ == '__main__':
-    format_question_data()
-    format_idx_data()
+    # format_question_data()
+    # format_idx_data()
+    format_topic_idx()
