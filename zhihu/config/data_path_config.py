@@ -39,6 +39,13 @@ class DataPathConfig:
     def get_question_train_char_set_path():
         return Tools.get_data_directory() + 'question_train_char_set.txt'
 
+    def get_question_train_word_topic_split_set_path():
+        return Tools.get_data_directory() + 'question_train_word_topic_split_set.csv'
+    def get_question_train_char_topic_split_set_path():
+        return Tools.get_data_directory() + 'question_train_char_topic_split_set.csv'
+    def get_question_topic_train_topic_split_set_path():
+        return Tools.get_data_directory() + 'question_topic_train_topic_split_set.csv'
+
     def get_question_train_word_title_set_path():
         return Tools.get_data_directory() + 'question_train_word_title_set.csv'
     def get_question_train_word_desc_set_path():
@@ -79,6 +86,8 @@ class DataPathConfig:
         return Tools.get_data_directory() + 'ns_train_word.txt'
     def get_ns_train_char_path():
         return Tools.get_data_directory() + 'ns_train_char.txt'
+
+
 
 class EvalPathConfig:
     def get_question_eval_word_title_set_path():

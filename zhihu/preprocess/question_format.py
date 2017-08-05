@@ -68,6 +68,10 @@ def format_question_data():
     q_w_set_out = open(DataPathConfig.get_question_train_word_set_path(), 'w')
     q_c_set_out = open(DataPathConfig.get_question_train_char_set_path(), 'w')
 
+    q_w_set_topic_split_out = open(DataPathConfig.get_question_train_word_topic_split_set_path(), 'w')
+    q_c_set_topic_split_out = open(DataPathConfig.get_question_train_char_topic_split_set_path(), 'w')
+    qt_topic_split_out = open(DataPathConfig.get_question_topic_train_topic_split_set_path(), 'w')
+
     missed_match_count = 0
 
     t0 = time()
@@ -78,7 +82,7 @@ def format_question_data():
 
     while True:
         num += 1
-        if num % 100000 == 0:
+        if num % 300000 == 0:
             log.info('finished: {} in {:.2f}s'.format(num, time() - t0))
         q_l = q_in.readline()
         qt_l = qt_in.readline()
@@ -97,17 +101,19 @@ def format_question_data():
         add_element(q_items[1], char_set)
         add_element(q_items[3], char_set)
 
-        if q_items[1] == '':
-            print(q_items[0])
-        q_w_set_out.write(q_items[2] + ',' + q_items[4] + '\n')
-        q_c_set_out.write(q_items[1] + ',' + q_items[3] + '\n')
-
         q_c_title_out.write(q_items[1] + '\n')
         q_c_desc_out.write(q_items[3] + '\n')
         q_w_title_out.write(q_items[2] + '\n')
         q_w_desc_out.write(q_items[4] + '\n')
 
         qt_out.write(qt_items[1] + '\n')
+        q_w_set_out.write(q_items[2] + ',' + q_items[4] + '\n')
+        q_c_set_out.write(q_items[1] + ',' + q_items[3] + '\n')
+
+        for topic in qt_items[0].split(','):
+            qt_topic_split_out.write(topic + '\n')
+            q_w_set_topic_split_out.write(q_items[2] + ',' + q_items[4] + '\n')
+            q_c_set_topic_split_out.write(q_items[1] + ',' + q_items[3] + '\n')
 
     q_in.close()
     qt_in.close()
@@ -131,6 +137,6 @@ def format_question_data():
     log.info('finished all {} in {:.2f}s, missed: {}'.format(num, time() - t0, missed_match_count))
 
 if __name__ == '__main__':
-    # format_question_data()
+    format_question_data()
     # format_idx_data()
-    format_topic_idx()
+    # format_topic_idx()
