@@ -14,8 +14,8 @@ batch_size = 256
 topic_num = 2000
 show_step = 50
 test_size = 1000
-num_sampled = 5
-num_true = 4
+num_sampled = 10
+num_true = 3
 l2_reg_lambda = 0.0001
 
 log.info('begin init network')

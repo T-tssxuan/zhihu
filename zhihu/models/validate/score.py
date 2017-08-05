@@ -55,7 +55,10 @@ class Score:
         # print(pre)
         # print(src)
         if self.show_count % 10 == 0:
-            print([list(set(a).intersection(set(b))) for a, b in zip(pre, src)])
+            inter = [list(set(a).intersection(set(b))) for a, b in zip(pre, src)]
+            total = sum([len(ele) for ele in inter])
+            print(inter)
+            print('total: {}'.format(total))
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 
