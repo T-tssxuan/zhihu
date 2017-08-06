@@ -9,7 +9,7 @@ from .cnntext import CNNText
 summary_path = Tools.get_tf_summary_path()
 
 log = Tools.get_logger('cnn text')
-learning_rate = 0.01
+learning_rate = 0.1
 batch_size = 256
 topic_num = 2000
 show_step = 50
