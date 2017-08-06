@@ -46,6 +46,9 @@ class CNNText:
         self.h_cnn = tf.reshape(cnn_output, shape=[-1, len(self.kernel_lens) * self.num_outputs])
         log.info('h_cnn: {}'.format(self.h_cnn.shape))
 
+        h_cnn_mean = tf.reduce_mean(self.h_cnn)
+        tf.summary.scalar('h_cnn_mean', h_cnn_mean)
+
         self.h_cnn_dropout = tf.layers.dropout(self.h_cnn, 0.5)
 
 
