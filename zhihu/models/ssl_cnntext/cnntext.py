@@ -7,7 +7,7 @@ log = Tools.get_logger('CNNText')
 class CNNText:
     def __init__(self, X, y, 
             class_num=2000, 
-            kernel_lens=[2, 3, 4, 5, 6], 
+            kernel_lens=[3, 4, 5, 6, 7], 
             num_outputs=512, 
             embedding_size=256,
             learning_rate=0.01,
