@@ -39,9 +39,10 @@ class DataProvider:
                     self._total_count += 1
                     if it in self.embeding:
                         row.append(self.embeding[it])
-                    else:
-                        row.append(self.padding_wv)
-                        self._miss_count += 1
+                    # not in should remove
+                    # else:
+                    #     row.append(self.padding_wv)
+                    #     self._miss_count += 1
 
             # if need to padding to the same length
             if self.is_need_length and fixed_length > 0:
