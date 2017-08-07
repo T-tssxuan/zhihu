@@ -12,6 +12,11 @@ class RawDataPathConfig:
         return Tools.get_raw_data_direcory() + 'question_eval_set.txt'
 
 class DataPathConfig:
+    def get_stop_word_set():
+        return Tools.get_data_directory() + 'stop_words.txt'
+    def get_stop_char_set():
+        return Tools.get_data_directory() + 'stop_chars.txt'
+
     def get_topic_desc_path():
         return Tools.get_data_directory() + 'topic_desc.tsv'
     def get_topic_desc_idx_path():

@@ -31,6 +31,13 @@ topic_cout:
     the_two: 1370348
 ```
 
+## word statistics
+- total: 
+- max_df: 0.5, stop_words: 2
+- max_df: 0.5, max_features: 50000, stop_words: 470670
+- max_df: 0.5, min_df: 50, stop_words: 452551
+- max_df: 0.5, min_df: 10, stop_words: 368022
+
 ## Fasttext Word
 1. 100 epcho, 128 dim, top 5, test_score: 0.30873630009518516, eval_score: 0.340780112005972, model_loss: 3.733466
 2. 100 epcho, 128 dim, top 4, test_score: 0.29067849355971903, eval_score: 0.313753920186513, model_loss: 3.733466
