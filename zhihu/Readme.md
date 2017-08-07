@@ -37,6 +37,7 @@ topic_cout:
 - max_df: 0.5, max_features: 50000, stop_words: 470670
 - max_df: 0.5, min_df: 50, stop_words: 452551
 - max_df: 0.5, min_df: 10, stop_words: 368022
+-
 
 ## Fasttext Word
 1. 100 epcho, 128 dim, top 5, test_score: 0.30873630009518516, eval_score: 0.340780112005972, model_loss: 3.733466
