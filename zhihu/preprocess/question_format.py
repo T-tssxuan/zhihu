@@ -146,10 +146,10 @@ def format_question_data():
         if q_items[0] != qt_items[0]:
             missed_match_count += 1
             continue
-        q_items[1] = ','.join([ele for ele in q_items[1].split(',') if ele not in stop_char])
-        q_items[2] = ','.join([ele for ele in q_items[2].split(',') if ele not in stop_word])
-        q_items[3] = ','.join([ele for ele in q_items[3].split(',') if ele not in stop_char])
-        q_items[4] = ','.join([ele for ele in q_items[4].split(',') if ele not in stop_word])
+        # q_items[1] = ','.join([ele for ele in q_items[1].split(',') if ele not in stop_char])
+        # q_items[2] = ','.join([ele for ele in q_items[2].split(',') if ele not in stop_word])
+        # q_items[3] = ','.join([ele for ele in q_items[3].split(',') if ele not in stop_char])
+        # q_items[4] = ','.join([ele for ele in q_items[4].split(',') if ele not in stop_word])
 
         add_element(q_items[2], word_set)
         add_element(q_items[4], word_set)
