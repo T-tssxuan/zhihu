@@ -22,9 +22,9 @@ class FastTextWord:
         self.obj.train()
         log.info('end train')
 
-    def test(self):
+    def test(self, topk):
         log.info('begin test')
-        self.obj.test(topk=self.topk)
+        self.obj.test(topk=topk)
         log.info('end test')
 
     def eval(self):
@@ -52,6 +52,6 @@ if __name__ == '__main__':
     if sys.argv[8] == 'train' or sys.argv[8] == 'all':
         ftc.train()
     if sys.argv[8] == 'test' or sys.argv[8] == 'all':
-        ftc.test()
+        ftc.test(5)
     if sys.argv[8] == 'eval' or sys.argv[8] == 'all':
         ftc.eval()

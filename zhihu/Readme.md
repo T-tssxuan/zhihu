@@ -45,6 +45,9 @@ topic_cout:
 3. 150 epcho, 128 dim, top 5, test_score: 0.2970169906346943, eval_score: 0.329263720847297, model_loss: 3.526699
 4. 5 epoch, 100 dim, top 5, test_score: 0.329319208558269, eval_score: 0.362809997222741, model_loss: 5.591572, lr: 0.5
 5. 10 epoch, 128 dim, top 5, minLable: 2, test_score: 0.33229068444181215, eval_score: 0.362180453118447, model_loss: 5.361451, lr: 0.2,
+6. -epoch 10 -thread 30 -dim 128 -lr 0.2 -lrUpdateRate 200 -ws 10 -neg 5 -minCount 5 -minCountLabel 3 -loss softmax, eval_score: 0.33068042537208564, model_loss: 5.038941
+7. -epoch 12 -thread 30 -dim 128 -lr 0.2 -lrUpdateRate 200 -ws 10 -neg 5 -minCount 5 -minCountLabel 3 -loss softmax, eval_score: 0.33215599422047204, model_loss: 4.926169
+8. -epoch 12 -thread 30 -dim 128 -lr 0.2 -lrUpdateRate 200 -ws 10 -neg 6 -minCount 5 -minCountLabel 5 -loss softmax, eval_score: 0.3313259644993264, model_loss: 4.906177
 
 ## Fasttext Char
 1. 200 epcho, 256 dim, top 5
