@@ -43,11 +43,14 @@ class Score:
         return (precision * recall) / max((precision + recall), 0.000001)
 
     def vanilla_score(self, pre, src):
+        inter = [list(set(a).intersection(set(b))) for a, b in zip(pre, src)]
+        total = sum([len(ele) for ele in inter])
+        log.info('total: {}'.format(total))
+        # log.info(inter)
         merged = [(list(set(a[:self.topk])), list(set(b))) for a, b in zip(pre, src)]
         return self._eval(merged)
 
     def score(self, pre, src):
-        self.show_count += 1
         pre = np.array(pre)
         pre = pre.argsort()[:, -self.topk:][:, ::-1].tolist()
 
@@ -63,6 +66,7 @@ class Score:
         if self.show_count % 10 == 0:
             log.info(inter)
         merged = [(list(set(a)), list(set(b))) for a, b in zip(pre, src)]
+        self.show_count += 1
         return self._eval(merged)
 
 if __name__ == '__main__':

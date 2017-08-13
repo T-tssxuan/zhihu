@@ -15,7 +15,7 @@ class FastTextWord:
             os.mkdir(cur_path + '/data')
         model = 'model_{}_{}_{:.2f}_{}'.format(epoch, dim, lr, update_rate)
         self.obj = FastText(cur_path, 'word', epoch, thread, dim, lr, 
-                update_rate, ws, neg, model)
+                update_rate, ws, neg, model=model)
 
     def train(self):
         log.info('begin train')
